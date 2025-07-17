@@ -30,6 +30,35 @@
         background-color: #fff;
       }
 
+      .datetable-inline {
+        border-collapse: collapse;
+        table-layout: auto; /* 内容に応じて幅を自動調整 */
+      }
+
+      .datetable-inline th,
+      .datetable-inline td {
+        border: 1px solid #000;
+        padding: 4px;
+        font-size: 16px;
+      }
+
+      /* ヘッダ共通 */
+      .datetable-inline thead th {
+        text-align: center;
+      }
+
+      /* tbodyのMonth列: 左側の列 */
+      .datetable-inline tbody td:first-child {
+        text-align: center;
+        white-space: nowrap; /* 月番号は折り返さない */
+      }
+
+      /* tbodyのDays列: 右側の列 */
+      .datetable-inline tbody td:last-child {
+        text-align: left;
+        white-space: nowrap; /* 日付は折り返さない */
+      }
+
       /* ページ全体 */
       body {
         font-family: sans-serif;
@@ -80,8 +109,31 @@
         background-color: #f0f0f0;
       }
 
+      button:active {
+        background-color: #ddd;
+      }
+
+      .section-flex {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .date-labels {
+        display: flex;
+        flex-direction: column;
+      }
       .date-label {
         font-size: 1.5rem;
+      }
+
+      .date-label.past,
+      .date-label.future {
+        color: #bbb;
+      }
+      .date-label.current {
+        color: #000;
+        font-weight: bold;
       }
 
       .control-group {
@@ -99,12 +151,17 @@
       input[type='range'] {
         vertical-align: middle;
       }
+
+      .sec7-quiz-container {
+        font-size: 17px;
+        padding-top: 1em;
+      }
     </style>
   </head>
 
   <body>
     <h1>DateTime</h1>
-    <p>In this page, we will learn a flow of datetime.</p>
+    <p>On this page, we will learn about the flow of date and time.</p>
 
     <section>
       <h2>Section 1. Months and Days</h2>
@@ -235,26 +292,30 @@
           </tr>
         </tbody>
       </table>
+      <p>
+        February normally has 28 days. But in a leap year, it has one extra day
+        — 29 days.
+      </p>
     </section>
     <section>
       <h2>Section 2. Memory Trick</h2>
       <p>
-        As shown in the figure, we can easily tell if a specific month is long
-        (31 days) or short (30 days or fewer).
+        As shown in the figure, we can easily tell whether a specific month is
+        long (31 days) or short (30 days or less).
       </p>
       <img src="img/fist.png" />
     </section>
-    <section>
+    <section id="sec3">
       <h2>Section 3. Understanding How Dates Change</h2>
-      <p>Below, we use the format "MM/dd". The unit is 1 day.</p>
-
-      <div style="display: flex; align-items: center; gap: 20px">
-        <div style="display: flex; flex-direction: column">
-          <div class="date-label" style="color: #bbb">04/02</div>
-          <div class="date-label">04/03</div>
-          <div class="date-label" style="color: #bbb">04/04</div>
+      <p>Below, we use the format "MM/dd". The counting unit is 1 day.</p>
+      <script src="dist/01-sec3.js" type="module"></script>
+      <div id="sec3-container" class="section-flex">
+        <div id="sec3-dateLabels" class="date-labels">
+          <div class="date-label past">04/02</div>
+          <div class="date-label current">04/03</div>
+          <div class="date-label future">04/04</div>
         </div>
-        <table class="datetable">
+        <table id="sec3-calendarTable" class="datetable datetable-inline">
           <thead>
             <tr>
               <th>Month</th>
@@ -264,7 +325,7 @@
           <tbody>
             <tr>
               <td>03</td>
-              <td>1 2 3 ... 30 31</td>
+              <td>1 2 3 4 5 ... 30 31</td>
             </tr>
             <tr>
               <td>04</td>
@@ -283,32 +344,33 @@
         type="range"
         id="sec3-speed-slider"
         name="speed"
-        min="1"
-        max="5"
+        min="0"
+        max="4"
         step="1"
-        value="1"
+        value="2"
       />
       <span id="sec3-speed-value">1 day/s</span>
 
       <div>
         <label>
-          <input type="checkbox" id="sec3-leapyear-checkbox" checked />
+          <input type="checkbox" id="sec3-leapyear-checkbox" />
           Enable Leap Year Rule
         </label>
       </div>
     </section>
 
-    <section>
+    <section id="sec4">
       <h2>Section 4. Date Counter (MM/dd)</h2>
-      <p>Below, we use the format "MM/dd". The unit is 1 day.</p>
+      <p>Below, we use the format "MM/dd". The counting unit is 1 day.</p>
+      <script src="dist/01-sec4.js" type="module"></script>
 
-      <div style="display: flex; align-items: center; gap: 20px">
-        <div style="display: flex; flex-direction: column">
-          <div class="date-label" style="color: #bbb">04/02</div>
-          <div class="date-label">04/03</div>
-          <div class="date-label" style="color: #bbb">04/04</div>
+      <div id="sec4-container" class="section-flex">
+        <div id="sec4-dateLabels" class="date-labels">
+          <div class="date-label past" style="color: #bbb">04/02</div>
+          <div class="date-label current">04/03</div>
+          <div class="date-label future" style="color: #bbb">04/04</div>
         </div>
-        <table class="datetable">
+        <table id="sec4-calendarTable" class="datetable datetable-inline">
           <thead>
             <tr>
               <th>Month</th>
@@ -318,7 +380,7 @@
           <tbody>
             <tr>
               <td>03</td>
-              <td>1 2 3 ... 30 31</td>
+              <td>1 2 3 4 5 ... 30 31</td>
             </tr>
             <tr>
               <td>04</td>
@@ -345,7 +407,7 @@
 
       <div>
         <label>
-          <input type="checkbox" id="sec4-leapyear-checkbox" checked />
+          <input type="checkbox" id="sec4-leapyear-checkbox" />
           Enable Leap Year Rule
         </label>
       </div>
@@ -353,19 +415,17 @@
     <section>
       <h2>Section 5. Date with Hours (MM/dd HH:mm)</h2>
       <p>
-        Below, we use the format "MM/dd HH:mm". The unit of counter is 1 hour.
+        Below, we use the format "MM/dd HH:mm". The counting unit is 1 hour.
       </p>
+      <script src="dist/01-sec5.js" type="module"></script>
 
-      <div style="display: flex; align-items: center; gap: 20px">
-        <!-- 現在の日付ラベル -->
-        <div style="display: flex; flex-direction: column">
-          <div class="date-label" style="color: #bbb">04/03 22:00</div>
-          <div class="date-label">04/03 23:00</div>
-          <div class="date-label" style="color: #bbb">04/04 00:00</div>
+      <div id="sec5-container" class="section-flex">
+        <div id="sec5-dateLabels" class="date-labels">
+          <div class="date-label past" style="color: #bbb">04/03 22:00</div>
+          <div class="date-label current">04/03 23:00</div>
+          <div class="date-label future" style="color: #bbb">04/04 00:00</div>
         </div>
-
-        <!-- カレンダー部分 -->
-        <table class="datetable">
+        <table id="sec5-calendarTable" class="datetable datetable-inline">
           <thead>
             <tr>
               <th>Month</th>
@@ -375,7 +435,7 @@
           <tbody>
             <tr>
               <td>03</td>
-              <td>1 2 3 ... 30 31</td>
+              <td>1 2 3 4 5 ... 30 31</td>
             </tr>
             <tr>
               <td>04</td>
@@ -394,16 +454,16 @@
         type="range"
         id="sec5-speed-slider"
         name="speed"
-        min="1"
-        max="5"
+        min="0"
+        max="6"
         step="1"
-        value="1"
+        value="3"
       />
       <span id="sec5-speed-value">1 h/s</span>
 
       <div>
         <label>
-          <input type="checkbox" id="sec5-leapyear-checkbox" checked />
+          <input type="checkbox" id="sec5-leapyear-checkbox" />
           Enable Leap Year Rule
         </label>
       </div>
@@ -412,19 +472,19 @@
     <section>
       <h2>Section 6. DateTime (MM/dd HH:mm)</h2>
       <p>
-        Below, we use the format "MM/dd HH:mm". The unit of counter is 1 minute.
+        Below, we use the format "MM/dd HH:mm". The counting unit is 1 minute.
       </p>
+      <script src="dist/01-sec6.js" type="module"></script>
 
-      <div style="display: flex; align-items: center; gap: 20px">
-        <!-- 現在の日付ラベル -->
-        <div style="display: flex; flex-direction: column">
-          <div class="date-label" style="color: #bbb">04/03 22:59</div>
-          <div class="date-label">04/03 23:00</div>
-          <div class="date-label" style="color: #bbb">04/03 23:01</div>
+      <div id="sec6-container" class="section-flex">
+        <div id="sec6-dateLabels" class="date-labels">
+          <div class="date-label past" style="color: #bbb">04/03 22:59</div>
+          <div class="date-label current">04/03 23:00</div>
+          <div class="date-label future" style="color: #bbb">04/03 23:01</div>
         </div>
 
         <!-- カレンダー部分 -->
-        <table class="datetable">
+        <table id="sec6-calendarTable" class="datetable datetable-inline">
           <thead>
             <tr>
               <th>Month</th>
@@ -434,7 +494,7 @@
           <tbody>
             <tr>
               <td>03</td>
-              <td>1 2 3 ... 30 31</td>
+              <td>1 2 3 4 5 ... 30 31</td>
             </tr>
             <tr>
               <td>04</td>
@@ -461,36 +521,44 @@
 
       <div>
         <label>
-          <input type="checkbox" id="sec6-leapyear-checkbox" checked />
+          <input type="checkbox" id="sec6-leapyear-checkbox" />
           Enable Leap Year Rule
         </label>
       </div>
     </section>
     <section id="sec7">
       <h2>Section 7. DateTime (yyyy/MM/dd HH:mm:ss)</h2>
+      <script src="dist/01-sec7.js" type="module"></script>
 
-      <button id="sec7-quiz-btn">[Quiz]</button>
-
-      <div style="margin-top: 1em">
+      <div class="controls-row" style="margin-top: 1em">
+        <button id="sec7-quiz-btn">[Quiz]</button>
+        <button id="sec7-reset-btn">[Reset]</button>
+      </div>
+      <div class="sec7-quiz-container">
+        <div>
+          Set a time
+          <strong style="color: brown"
+            ><span id="sec7-quiz-amount">7 hours</span> later</strong
+          >
+          from base time.
+        </div>
         <div>
           <strong>Base Time:</strong>
           <span id="sec7-base-time">2024/03/29 23:51:23</span>
         </div>
 
-        <div style="margin-top: 0.5em">
-          <strong
-            >How was <span id="sec7-quiz-amount">7 hours</span> from?</strong
-          >
-        </div>
-
-        <div style="margin-top: 0.5em">
+        <div>
           <strong>After Time:</strong>
-          <span id="sec7-after-time">2024/03/29 23:51:23</span>
-          <span id="sec7-match-result" style="color: red"></span>
+          <span id="sec7-after-time">2024/03/30 06:51:23</span>
+          <span id="sec7-match-result" style="color: red">match</span>
         </div>
       </div>
 
       <div class="controls-row" style="margin-top: 1em">
+        <div class="control-group">
+          <button id="sec7-inc-month">+1 month</button>
+          <button id="sec7-dec-month">-1 month</button>
+        </div>
         <div class="control-group">
           <button id="sec7-inc-day">+1 day</button>
           <button id="sec7-dec-day">-1 day</button>
