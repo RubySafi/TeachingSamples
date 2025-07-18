@@ -1,12 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>TypeScript DOM Template</title>
-</head>
-<body>
-  <h1>Hello, TypeScript!</h1>
-  <button id="myButton">Click Me</button>
-  <script type="module" src="./dist/index.js"></script>
-</body>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>時計</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        color: #0f0;
+      }
+      #header {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-family: sans-serif;
+        font-size: 3em;
+      }
+      #clock {
+        font-size: 20vw;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="clock">--:--:--</div>
+    <script src="dist/index.js" type="module"></script>
+  </body>
 </html>
