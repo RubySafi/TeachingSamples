@@ -54,8 +54,39 @@ function updateDisplay() {
 
 function createQuiz() {
   const units: Unit[] = ['day', 'hour', 'minute', 'month'];
-  const amount = Math.floor(Math.random() * 5) + 5; // 5～9
+  const amount = Math.floor(Math.random() * 10) + 5; // 5～14
   const unit = units[Math.floor(Math.random() * units.length)];
+
+  const randomYear = 2024; // 年は固定でも可
+  let randomMonth = Math.floor(Math.random() * 6); // 0-11
+  let randomDay = Math.floor(Math.random() * 28) + 1; // 1-28 安全
+  let randomHour = Math.floor(Math.random() * 24);
+  let randomMinute = Math.floor(Math.random() * 60);
+  const randomSecond = Math.floor(Math.random() * 60);
+
+  switch (unit) {
+    case 'day':
+      randomDay = 25 + Math.floor(Math.random() * 3);
+      break;
+    case 'hour':
+      randomHour = 20 + Math.floor(Math.random() * 3);
+      break;
+    case 'minute':
+      randomMinute = 55 + Math.floor(Math.random() * 3);
+      break;
+    case 'month':
+      randomMonth = 8 + Math.floor(Math.random() * 3);
+      break;
+  }
+
+  baseTime = new Date(
+    randomYear,
+    randomMonth,
+    randomDay,
+    randomHour,
+    randomMinute,
+    randomSecond
+  );
 
   // 新しい targetTime を計算
   const target = new Date(baseTime);
