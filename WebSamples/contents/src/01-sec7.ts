@@ -20,7 +20,7 @@ const quizAmountElem = document.getElementById('sec7-quiz-amount')!;
 let baseTime = new Date(2024, 2, 29, 23, 51, 23);
 let afterTime = new Date(baseTime);
 
-type Unit = 'day' | 'hour' | 'minute' | 'month';
+type Unit = 'day' | 'hour' | 'minute' | 'month' | 'second';
 
 interface Quiz {
   amount: number;
@@ -53,16 +53,20 @@ function updateDisplay() {
 }
 
 function createQuiz() {
-  const units: Unit[] = ['day', 'hour', 'minute', 'month'];
-  const amount = Math.floor(Math.random() * 10) + 5; // 5～14
+  const units: Unit[] = ['day', 'hour', 'minute', 'month', 'second'];
   const unit = units[Math.floor(Math.random() * units.length)];
 
-  const randomYear = 2024; // 年は固定でも可
-  let randomMonth = Math.floor(Math.random() * 6); // 0-11
-  let randomDay = Math.floor(Math.random() * 28) + 1; // 1-28 安全
+  const amount =
+    unit === 'second'
+      ? Math.floor(Math.random() * 20) + 5 // 秒だけ 5～24
+      : Math.floor(Math.random() * 10) + 5; // 他は 5～14
+
+  const randomYear = 2024;
+  let randomMonth = Math.floor(Math.random() * 6);
+  let randomDay = Math.floor(Math.random() * 28) + 1;
   let randomHour = Math.floor(Math.random() * 24);
   let randomMinute = Math.floor(Math.random() * 60);
-  const randomSecond = Math.floor(Math.random() * 60);
+  let randomSecond = Math.floor(Math.random() * 60);
 
   switch (unit) {
     case 'day':
@@ -77,6 +81,9 @@ function createQuiz() {
     case 'month':
       randomMonth = 8 + Math.floor(Math.random() * 3);
       break;
+    case 'second':
+      randomSecond = 55 + Math.floor(Math.random() * 3); // 秒も後半にしてズレ確認しやすく
+      break;
   }
 
   baseTime = new Date(
@@ -88,7 +95,6 @@ function createQuiz() {
     randomSecond
   );
 
-  // 新しい targetTime を計算
   const target = new Date(baseTime);
 
   switch (unit) {
@@ -102,15 +108,16 @@ function createQuiz() {
       target.setMinutes(target.getMinutes() + amount);
       break;
     case 'month':
-      // 月の繰り上がり考慮
       target.setMonth(target.getMonth() + amount);
+      break;
+    case 'second':
+      target.setSeconds(target.getSeconds() + amount);
       break;
   }
 
   currentQuiz = { amount, unit, targetTime: target };
   quizAmountElem.textContent = `${amount} ${unit}${amount > 1 ? 's' : ''} later`;
 
-  // Reset afterTime to baseTime on new quiz
   afterTime = new Date(baseTime);
   updateDisplay();
 }
@@ -120,7 +127,6 @@ function resetAfterTime() {
   updateDisplay();
 }
 
-// ボタン押下時の AfterTime 調整関数
 function addToAfterTime(unit: Unit, amount: number) {
   switch (unit) {
     case 'day':
@@ -135,16 +141,14 @@ function addToAfterTime(unit: Unit, amount: number) {
     case 'month':
       afterTime.setMonth(afterTime.getMonth() + amount);
       break;
+    case 'second':
+      afterTime.setSeconds(afterTime.getSeconds() + amount);
+      break;
   }
   updateDisplay();
 }
 
-// 秒だけ別関数
-function addSecondsToAfterTime(amount: number) {
-  afterTime.setSeconds(afterTime.getSeconds() + amount);
-  updateDisplay();
-}
-
+// 既存の秒用関数は不要 → addToAfterTime に統合
 // イベントリスナー
 quizBtn.addEventListener('click', () => {
   createQuiz();
@@ -162,8 +166,7 @@ incHourBtn.addEventListener('click', () => addToAfterTime('hour', 1));
 decHourBtn.addEventListener('click', () => addToAfterTime('hour', -1));
 incMinBtn.addEventListener('click', () => addToAfterTime('minute', 1));
 decMinBtn.addEventListener('click', () => addToAfterTime('minute', -1));
-incSecBtn.addEventListener('click', () => addSecondsToAfterTime(1));
-decSecBtn.addEventListener('click', () => addSecondsToAfterTime(-1));
+incSecBtn.addEventListener('click', () => addToAfterTime('second', 1));
+decSecBtn.addEventListener('click', () => addToAfterTime('second', -1));
 
-// 初期表示
 updateDisplay();

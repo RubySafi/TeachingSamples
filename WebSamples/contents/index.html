@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>時計</title>
+    <title>試験用時計</title>
     <style>
       html,
       body {
@@ -17,17 +17,19 @@
       #header {
         position: absolute;
         top: 10px;
-        left: 10px;
+        left: 30px;
         font-family: sans-serif;
-        font-size: 3em;
+        font-size: 2em;
       }
       #clock {
         font-size: 20vw;
         font-family: monospace;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
+    <div id="header">微分積分学 A 期末試験（12:00:00 + α まで）</div>
     <div id="clock">--:--:--</div>
     <script src="dist/index.js" type="module"></script>
   </body>
