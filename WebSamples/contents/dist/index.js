@@ -1,10 +1,12 @@
 "use strict";
 // index.ts
+const offsetMillis = -220 * 1000;
+
 function updateClock() {
     const clockElement = document.getElementById('clock');
     if (!clockElement)
         return;
-    const now = new Date();
+    const now = new Date(Date.now() + offsetMillis);
     const hh = now.getHours().toString().padStart(2, '0');
     const mm = now.getMinutes().toString().padStart(2, '0');
     const ss = now.getSeconds().toString().padStart(2, '0');
