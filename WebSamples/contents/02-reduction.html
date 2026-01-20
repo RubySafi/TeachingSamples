@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fraction Simplification Practice</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 40px;
+        line-height: 1.6;
+      }
+      section {
+        margin-bottom: 2em;
+      }
+      #exercise {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 1em;
+      }
+      input[type='number'] {
+        width: 80px;
+        font-size: 1.1em;
+        text-align: center;
+      }
+      button {
+        margin-left: 8px;
+        padding: 4px 12px;
+        font-size: 1em;
+      }
+      #result {
+        margin-top: 1em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h2>1. Understanding Fractions</h2>
+      <p>
+        A fraction <b>a/b</b> means "a divided by b". For example, 3/4
+        represents three parts out of four equal parts.
+      </p>
+    </section>
+
+    <section>
+      <h2>2. Equivalent Fractions</h2>
+      <p>
+        If you multiply or divide both the numerator and the denominator by the
+        same number, the value of the fraction does not change.
+      </p>
+      <p>Example: 2/3 = 4/6 = 6/9</p>
+    </section>
+
+    <section>
+      <h2>3. Practice: Find the Missing Number</h2>
+      <div id="exercise"></div>
+      <input id="answer" type="number" placeholder="?" />
+      <button id="checkBtn">Check</button>
+      <div id="result"></div>
+    </section>
+
+    <script type="module" src="./dist/script.js"></script>
+  </body>
+</html>
