@@ -9,7 +9,7 @@ var btnRandom = document.getElementById('btn-random');
 
 // 最小・最大値の設定（教育用に適切な範囲）
 var MIN_NUMBER = 0.000001;
-var MAX_NUMBER = 1000000;
+var MAX_NUMBER = 1000000000;
 
 // 表示更新
 function updateDisplay() {
