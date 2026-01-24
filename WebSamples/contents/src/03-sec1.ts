@@ -1,37 +1,61 @@
-// 03-sec1.ts
-let currentNumber = 1;
+export {}; // モジュール化のため
 
-// DOM 要素を取得
-const currentNumberDisplay = document.getElementById('current-number')!;
-const btnMultiply = document.getElementById('btn-multiply')!;
-const btnDivide = document.getElementById('btn-divide')!;
-const btnRandom = document.getElementById('btn-random')!;
+// 定数
+const UNIT_DIGITS = 10n;
+const UNIT = 10n ** UNIT_DIGITS; // 1e-7 相当
+const MAX_VALUE = 10n ** 20n; // オーバーフロー防止
+const MIN_RANDOM = 1n * 10n ** 7n; // 0.001相当
+const MAX_RANDOM = 100000n * MIN_RANDOM; // 1000相当
+const RANGE = 6; //ランダムな桁数
 
-// 表示を更新
-function updateDisplay() {
-  // 小数は最大2桁まで表示
-  currentNumberDisplay.textContent = Number.isInteger(currentNumber)
-    ? currentNumber.toString()
-    : currentNumber.toFixed(2);
+// DOM取得
+const currentNumberDisplay = document.getElementById(
+  'current-number'
+) as HTMLDivElement;
+const btnMultiply = document.getElementById(
+  'btn-multiply'
+) as HTMLButtonElement;
+const btnDivide = document.getElementById('btn-divide') as HTMLButtonElement;
+const btnRandom = document.getElementById('btn-random') as HTMLButtonElement;
+
+// 内部値
+let value: bigint = 1n * 10n ** 10n; // 初期値 1.0
+
+// 表示更新
+function updateDisplay(): void {
+  const str = value.toString().padStart(Number(UNIT_DIGITS) + 1, '0');
+  const intPart = str.slice(0, -Number(UNIT_DIGITS));
+  let fracPart = str.slice(-Number(UNIT_DIGITS));
+
+  // 末尾のゼロを削除
+  fracPart = fracPart.replace(/0+$/, '');
+
+  currentNumberDisplay.textContent =
+    fracPart.length > 0 ? `${intPart}.${fracPart}` : intPart;
+
+  // ÷10ボタン制御
+  btnDivide.disabled = value % 10n !== 0n;
+
+  // ×10ボタン制御
+  btnMultiply.disabled = value * 10n > MAX_VALUE;
 }
 
-// ×10 ボタン
+// ×10
 btnMultiply.addEventListener('click', () => {
-  currentNumber *= 10;
+  value *= 10n;
   updateDisplay();
 });
 
-// ÷10 ボタン
+// ÷10
 btnDivide.addEventListener('click', () => {
-  currentNumber /= 10;
+  if (value % 10n === 0n) value /= 10n;
   updateDisplay();
 });
 
-// random ボタン
+// random
 btnRandom.addEventListener('click', () => {
-  // 0.01〜9.99 の小数を生成
-  const randomValue = Math.random() * 9.98 + 0.01;
-  currentNumber = Math.round(randomValue * 100) / 100; // 小数第2位まで
+  const rand = MIN_RANDOM * BigInt(Math.floor(Math.random() * 10 ** RANGE));
+  value = rand;
   updateDisplay();
 });
 

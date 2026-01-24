@@ -1,56 +1,48 @@
-// 03-sec1.js (改良版)
-var currentNumber = 1;
-
-// DOM 要素
-var currentNumberDisplay = document.getElementById('current-number');
-var btnMultiply = document.getElementById('btn-multiply');
-var btnDivide = document.getElementById('btn-divide');
-var btnRandom = document.getElementById('btn-random');
-
-// 最小・最大値の設定（教育用に適切な範囲）
-var MIN_NUMBER = 0.000001;
-var MAX_NUMBER = 1000000;
-
+// 定数
+const UNIT_DIGITS = 10n;
+const UNIT = 10n ** UNIT_DIGITS; // 1e-7 相当
+const MAX_VALUE = 10n ** 20n; // オーバーフロー防止
+const MIN_RANDOM = 1n * 10n ** 7n; // 0.001相当
+const MAX_RANDOM = 100000n * MIN_RANDOM; // 1000相当
+const RANGE = 6; //ランダムな桁数
+// DOM取得
+const currentNumberDisplay = document.getElementById('current-number');
+const btnMultiply = document.getElementById('btn-multiply');
+const btnDivide = document.getElementById('btn-divide');
+const btnRandom = document.getElementById('btn-random');
+// 内部値
+let value = 1n * 10n ** 10n; // 初期値 1.0
 // 表示更新
 function updateDisplay() {
-    currentNumberDisplay.textContent = Number(currentNumber.toFixed(12));
-
-    // ÷10 ボタン制御
-    if (currentNumber / 10 < MIN_NUMBER) {
-        btnDivide.disabled = true;
-    } else {
-        btnDivide.disabled = false;
-    }
-
-    // ×10 ボタン制御
-    if (currentNumber * 10 > MAX_NUMBER) {
-        btnMultiply.disabled = true;
-    } else {
-        btnMultiply.disabled = false;
-    }
+    const str = value.toString().padStart(Number(UNIT_DIGITS) + 1, '0');
+    const intPart = str.slice(0, -Number(UNIT_DIGITS));
+    let fracPart = str.slice(-Number(UNIT_DIGITS));
+    // 末尾のゼロを削除
+    fracPart = fracPart.replace(/0+$/, '');
+    currentNumberDisplay.textContent =
+        fracPart.length > 0 ? `${intPart}.${fracPart}` : intPart;
+    // ÷10ボタン制御
+    btnDivide.disabled = value % 10n !== 0n;
+    // ×10ボタン制御
+    btnMultiply.disabled = value * 10n > MAX_VALUE;
 }
-
-// ×10 ボタン
-btnMultiply.addEventListener('click', function () {
-    currentNumber *= 10;
+// ×10
+btnMultiply.addEventListener('click', () => {
+    value *= 10n;
     updateDisplay();
 });
-
-// ÷10 ボタン
-btnDivide.addEventListener('click', function () {
-    currentNumber /= 10;
+// ÷10
+btnDivide.addEventListener('click', () => {
+    if (value % 10n === 0n)
+        value /= 10n;
     updateDisplay();
 });
-
-// random ボタン
-btnRandom.addEventListener('click', function () {
-    // 0.01〜99.99 の範囲で生成
-    var randomValue = Math.random() * 99.98 + 0.01;
-    // 小数第2位まで丸め
-    currentNumber = Math.round(randomValue * 100) / 100;
+// random
+btnRandom.addEventListener('click', () => {
+    const rand = MIN_RANDOM * BigInt(Math.floor(Math.random() * 10 ** RANGE));
+    value = rand;
     updateDisplay();
 });
-
-
 // 初期表示
 updateDisplay();
+export {};
