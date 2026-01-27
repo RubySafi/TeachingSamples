@@ -19,7 +19,7 @@ const btnDivide = document.getElementById('btn-divide') as HTMLButtonElement;
 const btnRandom = document.getElementById('btn-random') as HTMLButtonElement;
 
 // 内部値
-let value: bigint = 1n * 10n ** 10n; // 初期値 1.0
+let value: bigint = 7n * 10n ** 10n; // 初期値 1.0
 
 // 表示更新
 function updateDisplay(): void {

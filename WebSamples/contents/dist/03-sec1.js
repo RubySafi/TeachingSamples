@@ -11,7 +11,7 @@ const btnMultiply = document.getElementById('btn-multiply');
 const btnDivide = document.getElementById('btn-divide');
 const btnRandom = document.getElementById('btn-random');
 // 内部値
-let value = 1n * 10n ** 10n; // 初期値 1.0
+let value = 7n * 10n ** 10n; // 初期値 1.0
 // 表示更新
 function updateDisplay() {
     const str = value.toString().padStart(Number(UNIT_DIGITS) + 1, '0');
