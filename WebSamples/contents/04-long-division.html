@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lond Division</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2em;
+        line-height: 1.6;
+      }
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5em;
+      }
+      section {
+        margin: 2em 0;
+        padding: 1em 0;
+        border-top: 1px solid #ddd;
+      }
+      p {
+        margin: 0.5em 0 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Long Division</h1>
+    <p>
+      This page helps you understand how construct long-division-format to
+      calculate a division.
+    </p>
+
+    <section>
+      <h2>Section 1: Long Division</h2>
+      <div
+        id="division-container"
+        style="display: grid; grid-template-columns: repeat(6, 2rem)"
+      >
+        <div class="cell divisor" style="grid-row: 2; grid-column: 1">5</div>
+
+        <div class="cell bracket" style="grid-row: 2; grid-column: 2">)</div>
+
+        <div class="cell dividend" style="grid-row: 2; grid-column: 3">6</div>
+        <div class="cell dividend" style="grid-row: 2; grid-column: 4">2</div>
+        <div class="cell dividend" style="grid-row: 2; grid-column: 5">8</div>
+
+        <input
+          type="text"
+          class="input-cell"
+          data-row="0"
+          data-col="3"
+          maxlength="1"
+        />
+      </div>
+    </section>
+
+    <script type="module" src="dist/04-sec1.js"></script>
+  </body>
+</html>

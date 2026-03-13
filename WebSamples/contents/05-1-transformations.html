@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deformation : Transformation</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2em;
+        line-height: 1.6;
+      }
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5em;
+      }
+      section {
+        margin: 2em 0;
+        padding: 1em 0;
+        border-top: 1px solid #ddd;
+      }
+      p {
+        margin: 0.5em 0 1em;
+      }
+      .number-display {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 1em 0;
+      }
+      .controls-row {
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+      }
+      button {
+        min-width: 100px;
+        min-height: 40px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      table {
+        border-collapse: collapse;
+        margin-top: 1em;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f0f0f0;
+      }
+      .highlight {
+        background-color: yellow;
+        font-weight: bold;
+      }
+      button {
+        min-width: 35px;
+        min-height: 35px;
+        font-size: 1.2rem; /* 文字サイズを少し大きく */
+        font-weight: bold; /* 太字にする */
+        text-align: center; /* 中央寄せ（デフォルトですが明示してもOK） */
+        vertical-align: middle; /* 中央寄せの補助 */
+        display: flex; /* フレックスで中央揃え */
+        justify-content: center; /* 横方向中央 */
+        align-items: center; /* 縦方向中央 */
+        cursor: pointer;
+      }
+    </style>
+
+    <style>
+      /* 共通設定：小さな土台 */
+      .canvas {
+        width: 100px;
+        height: 100px;
+        border: 1px dashed #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        margin: auto;
+      }
+      .shape {
+        width: 40px;
+        height: 40px;
+        background: #3498db; /* 爽やかな青 */
+        opacity: 0.8;
+      }
+
+      /* 1. Slide: 横にすーっと動く */
+      .slide {
+        animation: anim-slide 2s infinite alternate ease-in-out;
+      }
+      @keyframes anim-slide {
+        from {
+          transform: translateX(-25px);
+        }
+        to {
+          transform: translateX(25px);
+        }
+      }
+
+      /* 2. Turn: くるくる回る */
+      .rotate {
+        animation: anim-rotate 3s infinite linear;
+      }
+      @keyframes anim-rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* 3. Dilation: 形を保ったまま大きくなったり小さくなったり */
+      .dilate {
+        animation: anim-dilate 2s infinite alternate ease-in-out;
+      }
+      @keyframes anim-dilate {
+        from {
+          transform: scale(0.4);
+        }
+        to {
+          transform: scale(1.2);
+        }
+      }
+
+      /* 4. Flip: 鏡合わせにパタンとひっくり返る */
+      .reflect {
+        border-left: 3px solid #e74c3c; /* 反転の軸をわかりやすく赤に */
+        animation: anim-reflect 2s infinite alternate ease-in-out;
+      }
+      @keyframes anim-reflect {
+        from {
+          transform: scaleX(1);
+        }
+        to {
+          transform: scaleX(-1);
+        }
+      }
+
+      /* 5. Scaling: 横長になったり縦長になったり（Dilationとの違い用） */
+      .scale-non-uniform {
+        animation: anim-scale-nu 3s infinite alternate ease-in-out;
+      }
+      @keyframes anim-scale-nu {
+        0% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.8, 0.5);
+        } /* 横長 */
+        100% {
+          transform: scale(0.5, 1.8);
+        } /* 縦長 */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Transformations</h1>
+    <p>
+      Let's learn how to move and change shapes using <b>transformations</b>! We
+      will look at translation, rotation, dilation, scaling, and reflection.
+    </p>
+
+    <section>
+      <h2>Section 1: What do they mean?</h2>
+      <p>Here is a quick guide to the words we use for changing shapes.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Terminology</th>
+            <th>Popular Name</th>
+            <th>Meaning</th>
+            <th>Figure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Translation</b></td>
+            <td>Slide</td>
+            <td>Moving a shape to a new place without turning it.</td>
+            <td>
+              <div class="canvas"><div class="shape slide"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><b>Rotation</b></td>
+            <td>Turn</td>
+            <td>Spinning a shape around a center point.</td>
+            <td>
+              <div class="canvas"><div class="shape rotate">abc</div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><b>Dilation</b></td>
+            <td>Enlargement / Reduction</td>
+            <td>
+              Making a shape bigger or smaller while keeping the same shape.
+            </td>
+            <td>
+              <div class="canvas"><div class="shape dilate">abc</div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><b>Reflection</b></td>
+            <td>Flip</td>
+            <td>Flipping a shape over a line, like looking in a mirror.</td>
+            <td>
+              <div class="canvas"><div class="shape reflect"></div></div>
+            </td>
+          </tr>
+          <tr>
+            <td><b>Scaling</b></td>
+            <td>Resizing</td>
+            <td>
+              Changing the size of a shape (sometimes making it wider or
+              taller).
+            </td>
+            <td>
+              <div class="canvas">
+                <div class="shape scale-non-uniform"></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <h2>Section 2: Translation (Slide) Experiment</h2>
+      <div id="slideInfo">Moved:</div>
+      <canvas
+        id="slideCanvas"
+        width="600"
+        height="270"
+        style="border: 1px solid #000"
+      ></canvas>
+
+      <div class="controls">
+        <div
+          style="
+            display: grid;
+            grid-template-rows: 40px 40px;
+            grid-template-columns: 40px 40px 40px 20px 80px 80px 1fr;
+            gap: 1px 5px;
+            align-items: center;
+          "
+        >
+          <button id="sec2_mode_U" style="grid-row: 1; grid-column: 2">
+            ↑
+          </button>
+          <button id="sec2_mode_L" style="grid-row: 2; grid-column: 1">
+            ←
+          </button>
+          <button id="sec2_mode_D" style="grid-row: 2; grid-column: 2">
+            ↓
+          </button>
+          <button id="sec2_mode_R" style="grid-row: 2; grid-column: 3">
+            →
+          </button>
+          <button id="sec2_reset" style="grid-row: 2; grid-column: 5">
+            Reset
+          </button>
+          <button id="sec2_new" style="grid-row: 2; grid-column: 6">New</button>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>Section 3: Translation (Slide) Move Game</h2>
+      <div id="sec3_slideGoalInfo">Goal:</div>
+      <canvas
+        id="sec3_slideCanvas"
+        width="600"
+        height="270"
+        style="border: 1px solid #000"
+      ></canvas>
+
+      <div class="controls">
+        <div
+          style="
+            display: grid;
+            grid-template-rows: 40px 40px;
+            grid-template-columns: 40px 40px 40px 20px 80px 80px 1fr;
+            gap: 1px 5px;
+            align-items: center;
+          "
+        >
+          <button id="sec3_mode_U" style="grid-row: 1; grid-column: 2">
+            ↑
+          </button>
+          <button id="sec3_mode_L" style="grid-row: 2; grid-column: 1">
+            ←
+          </button>
+          <button id="sec3_mode_D" style="grid-row: 2; grid-column: 2">
+            ↓
+          </button>
+          <button id="sec3_mode_R" style="grid-row: 2; grid-column: 3">
+            →
+          </button>
+          <button id="sec3_reset" style="grid-row: 2; grid-column: 5">
+            Reset
+          </button>
+          <button id="sec3_quiz" style="grid-row: 2; grid-column: 6">
+            New
+          </button>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>Section 4: Translation (Slide) Draw Game</h2>
+      <p>
+        Look at the model on the left. Draw the same shape on the right! The
+        <span style="color: red">red</span> tile shows you where to start.
+      </p>
+      <div id="sec4_slideGoalInfo"></div>
+      <div style="display: flex; gap: 20px; align-items: flex-start">
+        <canvas
+          id="sec4_ModelCanvas"
+          width="120"
+          height="240"
+          style="border: 1px solid #000"
+        ></canvas>
+        <canvas
+          id="sec4_MainCanvas"
+          width="240"
+          height="240"
+          style="border: 1px solid #000"
+        ></canvas>
+      </div>
+      <div class="controls">
+        <div
+          style="
+            display: grid;
+            grid-template-rows: 20px 40px;
+            grid-template-columns: 80px 80px 80px 1fr;
+            gap: 1px 5px;
+            align-items: center;
+          "
+        >
+          <button id="sec4_reset" style="grid-row: 2; grid-column: 1">
+            Reset
+          </button>
+          <button id="sec4_quiz" style="grid-row: 2; grid-column: 2">
+            New
+          </button>
+          <button id="sec4_quiz2" style="grid-row: 2; grid-column: 3">
+            New2
+          </button>
+        </div>
+      </div>
+    </section>
+    <script type="module" src="dist/05-sec2.js"></script>
+    <script type="module" src="dist/05-sec3.js"></script>
+    <script type="module" src="dist/05-sec4.js"></script>
+  </body>
+</html>
