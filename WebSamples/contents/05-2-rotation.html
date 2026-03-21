@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deformation : Transformation</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2em;
+        line-height: 1.6;
+      }
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5em;
+      }
+      section {
+        margin: 2em 0;
+        padding: 1em 0;
+        border-top: 1px solid #ddd;
+      }
+      p {
+        margin: 0.5em 0 1em;
+      }
+      .number-display {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 1em 0;
+      }
+      .controls-row {
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+      }
+      button {
+        min-width: 100px;
+        min-height: 40px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      table {
+        border-collapse: collapse;
+        margin-top: 1em;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f0f0f0;
+      }
+      .highlight {
+        background-color: yellow;
+        font-weight: bold;
+      }
+      button {
+        min-width: 35px;
+        min-height: 35px;
+        font-size: 1.2rem; /* 文字サイズを少し大きく */
+        font-weight: bold; /* 太字にする */
+        text-align: center; /* 中央寄せ（デフォルトですが明示してもOK） */
+        vertical-align: middle; /* 中央寄せの補助 */
+        display: flex; /* フレックスで中央揃え */
+        justify-content: center; /* 横方向中央 */
+        align-items: center; /* 縦方向中央 */
+        cursor: pointer;
+      }
+    </style>
+
+    <style>
+      /* 共通設定：小さな土台 */
+      .canvas {
+        width: 100px;
+        height: 100px;
+        border: 1px dashed #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        margin: auto;
+      }
+      .shape {
+        width: 40px;
+        height: 40px;
+        background: #3498db; /* 爽やかな青 */
+        opacity: 0.8;
+      }
+      /* 正の方向：反時計回り */
+      .rotate-pos {
+        animation: anim-pos 4s infinite linear;
+      }
+      @keyframes anim-pos {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(-360deg);
+        } /* CSSではマイナスが反時計回りですが、表示上のラベルで制御します */
+      }
+
+      /* 負の方向：時計回り */
+      .rotate-neg {
+        animation: anim-neg 4s infinite linear;
+      }
+      @keyframes anim-neg {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+    <style>
+      /* 05-2-sec4.css */
+
+      /* 右回転のアニメーション */
+      @keyframes rotate-cw {
+        0% {
+          transform: rotate(0deg);
+          opacity: 0.6;
+        }
+        80% {
+          transform: rotate(90deg);
+          opacity: 0.6;
+        }
+        100% {
+          transform: rotate(90deg);
+          opacity: 0;
+        } /* 最後は消えてループ */
+      }
+
+      /* 左回転のアニメーション */
+      @keyframes rotate-ccw {
+        0% {
+          transform: rotate(0deg);
+          opacity: 0.6;
+        }
+        80% {
+          transform: rotate(-90deg);
+          opacity: 0.6;
+        }
+        100% {
+          transform: rotate(-90deg);
+          opacity: 0;
+        }
+      }
+
+      .anim-container {
+        position: absolute;
+        width: 150px; /* TILE_SIZE * 5 */
+        height: 150px;
+        top: 0;
+        left: 0;
+        transform-origin: center center;
+        pointer-events: none; /* クリックを邪魔しない */
+      }
+
+      .anim-cw {
+        animation: rotate-cw 2.5s infinite ease-in-out;
+      }
+      .anim-ccw {
+        animation: rotate-ccw 2.5s infinite ease-in-out;
+      }
+
+      .grid-base {
+        position: relative;
+        overflow: hidden; /* はみ出し防止 */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Transformations : Rotation</h1>
+    <p>
+      <b>Rotation</b> is like a spinning wheel or a clock's hands. To describe a
+      rotation, we need to know two things: How far (the angle) and Which way
+      (the direction).
+    </p>
+    <section>
+      <h2>Section 1: How to Turn</h2>
+      <p>In math, we have special names for the two directions of turning:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Direction</th>
+            <th>Meaning</th>
+            <th>Animation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Positive (+)</b></td>
+            <td><b>Counter-clockwise (CCW)</b> (Left turn)</td>
+            <td>
+              <div class="canvas">
+                <div class="shape rotate-pos">Positive</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><b>Negative (-)</b></td>
+            <td><b>Clockwise (CW)</b> (Right turn)</td>
+            <td>
+              <div class="canvas">
+                <div class="shape rotate-neg">Negative</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Section 2: Smooth Rotation (Experiment)</h2>
+      <p>
+        Click the buttons to see how the shape turns 90 degrees.<br />
+        Observe the <b>center point</b> carefully!
+      </p>
+
+      <div
+        id="sec02-grid-base"
+        style="
+          width: 150px;
+          height: 150px;
+          border: 2px solid #333;
+          margin: 20px auto;
+          position: relative;
+          background-image:
+            linear-gradient(#eee 1px, transparent 1px),
+            linear-gradient(90deg, #eee 1px, transparent 1px);
+          background-size: 30px 30px;
+        "
+      >
+        <div
+          id="sec02-mino-container"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            transition: transform 1s ease-in-out;
+            transform-origin: center center;
+          "
+        ></div>
+
+        <div
+          style="
+            position: absolute;
+            top: 72px;
+            left: 72px;
+            width: 6px;
+            height: 6px;
+            background: #e74c3c;
+            border-radius: 50%;
+            z-index: 10;
+          "
+        ></div>
+      </div>
+
+      <div
+        class="controls-row"
+        style="justify-content: center; margin-top: 1em"
+      >
+        <button id="sec02-btn-ccw">⟲ Turn 90° (Counter-clockwise)</button>
+        <button id="sec02-btn-cw">⟳ Turn 90° (Clockwise)</button>
+        <button id="sec02-btn-new">New Shape</button>
+      </div>
+
+      <div
+        id="sec02-angle-info"
+        style="text-align: center; margin-top: 0.5em; font-weight: bold"
+      >
+        Current Angle: 0°
+      </div>
+    </section>
+
+    <section>
+      <h2>Section 3: Rotation Quiz</h2>
+      <p
+        id="sec03-question-text"
+        style="font-size: 1.2rem; font-weight: bold; min-height: 1.5em"
+      >
+        Which one is turned <b>90° clockwise (⟳)</b>?
+      </p>
+
+      <div
+        style="
+          display: flex;
+          gap: 20px;
+          align-items: flex-start;
+          justify-content: center;
+          flex-wrap: wrap;
+        "
+      >
+        <div style="text-align: center">
+          <span style="display: block; margin-bottom: 5px; color: #666"
+            >Original</span
+          >
+          <div
+            id="sec03-grid-question"
+            class="grid-base-style"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+            "
+          ></div>
+        </div>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+          "
+        >
+          <div style="text-align: center">
+            <div
+              id="sec03-choice-0"
+              class="choice-grid"
+              style="
+                width: 120px;
+                height: 120px;
+                border: 1px solid #ccc;
+                position: relative;
+                cursor: pointer;
+              "
+            ></div>
+            <button id="sec03-btn-0" style="margin-top: 5px; width: 100%">
+              A
+            </button>
+          </div>
+
+          <div style="text-align: center">
+            <div
+              id="sec03-choice-1"
+              class="choice-grid"
+              style="
+                width: 120px;
+                height: 120px;
+                border: 1px solid #ccc;
+                position: relative;
+                cursor: pointer;
+              "
+            ></div>
+            <button id="sec03-btn-1" style="margin-top: 5px; width: 100%">
+              B
+            </button>
+          </div>
+
+          <div style="text-align: center">
+            <div
+              id="sec03-choice-2"
+              class="choice-grid"
+              style="
+                width: 120px;
+                height: 120px;
+                border: 1px solid #ccc;
+                position: relative;
+                cursor: pointer;
+              "
+            ></div>
+            <button id="sec03-btn-2" style="margin-top: 5px; width: 100%">
+              C
+            </button>
+          </div>
+
+          <div style="text-align: center">
+            <div
+              id="sec03-choice-3"
+              class="choice-grid"
+              style="
+                width: 120px;
+                height: 120px;
+                border: 1px solid #ccc;
+                position: relative;
+                cursor: pointer;
+              "
+            ></div>
+            <button id="sec03-btn-3" style="margin-top: 5px; width: 100%">
+              D
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px">
+        <button
+          id="sec03-btn-next"
+          style="
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+          "
+        >
+          Next Question
+        </button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Section 4: Relative Rotation</h2>
+      <p>
+        Focus on the <b>Red Cell</b> and the <b>Arrow</b>. <br />
+        See how the direction changes when the shape turns!
+      </p>
+
+      <div
+        style="
+          display: flex;
+          gap: 30px;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+        "
+      >
+        <div style="text-align: center">
+          <div
+            id="sec04-grid-orig"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+              background: #f9f9f9;
+            "
+          ></div>
+          <div style="margin-top: 5px; font-weight: bold">Original</div>
+        </div>
+
+        <div style="font-size: 2rem">➜</div>
+
+        <div style="text-align: center">
+          <div
+            id="sec04-grid-cw"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+              background: #fff;
+            "
+          ></div>
+          <div style="margin-top: 5px; color: #e67e22; font-weight: bold">
+            90° Clockwise (⟳)
+          </div>
+        </div>
+
+        <div style="text-align: center">
+          <div
+            id="sec04-grid-ccw"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+              background: #fff;
+            "
+          ></div>
+          <div style="margin-top: 5px; color: #3498db; font-weight: bold">
+            90° Counter-clockwise (⟲)
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px">
+        <button id="sec04-btn-next" style="padding: 10px 20px; cursor: pointer">
+          Generate New Arrow
+        </button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Section 5: Relative Rotation (Quiz)</h2>
+      <div
+        id="sec05-question-text"
+        style="font-weight: bold; margin-bottom: 10px"
+      >
+        Rotate the shape 90° Clockwise!
+      </div>
+
+      <div
+        style="
+          display: flex;
+          gap: 50px;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <div>
+          <div
+            id="sec05-base"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+            "
+          ></div>
+          <p>Original</p>
+        </div>
+
+        <div style="font-size: 2rem">➜</div>
+
+        <div>
+          <div
+            id="sec05-ans"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+              cursor: pointer;
+            "
+          ></div>
+          <p>Click tiles to draw the result!</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px">
+        <button
+          id="sec05-btn-next"
+          style="padding: 10px 20px; margin-left: 10px"
+        >
+          Next Problem
+        </button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Section 6: Relative Rotation (Quiz; Pentomino)</h2>
+      <div
+        id="sec06-question-text"
+        style="font-weight: bold; margin-bottom: 10px"
+      >
+        Rotate the shape 90° Clockwise!
+      </div>
+
+      <div
+        style="
+          display: flex;
+          gap: 50px;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <div>
+          <div
+            id="sec06-base"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+            "
+          ></div>
+          <p>Original</p>
+        </div>
+
+        <div style="font-size: 2rem">➜</div>
+
+        <div>
+          <div
+            id="sec06-ans"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+              cursor: pointer;
+            "
+          ></div>
+          <p>Click tiles to draw the result!</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px">
+        <button
+          id="sec06-btn-next"
+          style="padding: 10px 20px; margin-left: 10px"
+        >
+          Next Problem
+        </button>
+      </div>
+    </section>
+    <script type="module" src="dist/05-2-sec2.js"></script>
+    <script type="module" src="dist/05-2-sec3.js"></script>
+    <script type="module" src="dist/05-2-sec4.js"></script>
+    <script type="module" src="dist/05-2-sec5.js"></script>
+    <script type="module" src="dist/05-2-sec6.js"></script>
+  </body>
+</html>
