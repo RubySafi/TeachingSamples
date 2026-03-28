@@ -602,10 +602,123 @@
         </button>
       </div>
     </section>
+    <section>
+      <h2>Section 7: Multi-Level Rotation Quiz</h2>
+      <div
+        id="sec07-question-text"
+        style="font-weight: bold; margin-bottom: 10px"
+      >
+        Select a level to start!
+      </div>
+
+      <div
+        style="
+          display: flex;
+          gap: 50px;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <div>
+          <div
+            id="sec07-base"
+            class="grid-base"
+            style="
+              width: 150px;
+              height: 150px;
+              border: 2px solid #333;
+              position: relative;
+            "
+          ></div>
+          <p>Original</p>
+        </div>
+
+        <div style="font-size: 2rem">➜</div>
+
+        <div>
+          <div
+            id="sec07-ans"
+            class="grid-base"
+            style="
+              width: 210px;
+              height: 210px;
+              border: 2px solid #333;
+              position: relative;
+              cursor: pointer;
+            "
+          ></div>
+          <p>Click tiles to draw the result!</p>
+        </div>
+      </div>
+
+      <div
+        style="
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          margin-bottom: 20px;
+        "
+      >
+        <button
+          id="sec07-btn-low"
+          style="
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+          "
+        >
+          low-mino
+        </button>
+        <button
+          id="sec07-btn-4"
+          style="
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+          "
+        >
+          4-mino
+        </button>
+        <button
+          id="sec07-btn-5"
+          style="
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+          "
+        >
+          5-mino
+        </button>
+        <button
+          id="sec07-btn-hint"
+          style="
+            background: #f1c40f;
+            color: #333;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+          "
+        >
+          HINT
+        </button>
+      </div>
+    </section>
     <script type="module" src="dist/05-2-sec2.js"></script>
     <script type="module" src="dist/05-2-sec3.js"></script>
     <script type="module" src="dist/05-2-sec4.js"></script>
     <script type="module" src="dist/05-2-sec5.js"></script>
     <script type="module" src="dist/05-2-sec6.js"></script>
+    <script type="module" src="dist/05-2-sec7.js"></script>
   </body>
 </html>

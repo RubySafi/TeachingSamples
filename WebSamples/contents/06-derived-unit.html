@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Units: Combining Units</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2em;
+        line-height: 1.6;
+        background-color: #fcfcfc;
+      }
+      h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 0.5em;
+      }
+      section {
+        margin: 2em 0;
+        padding: 1.5em;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: white;
+      }
+      .formula-box {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 1em;
+        margin: 1em 0;
+        background-color: #f0f4f8;
+        border-radius: 10px;
+        min-height: 1.5em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #2c3e50;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 1em;
+      }
+      button {
+        padding: 10px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        border: 2px solid #34495e;
+        border-radius: 5px;
+        background: white;
+        transition: all 0.2s;
+      }
+      button:hover {
+        background: #ecf0f1;
+      }
+      button.multiply {
+        border-color: #27ae60;
+        color: #27ae60;
+      }
+      button.divide {
+        border-color: #e67e22;
+        color: #e67e22;
+      }
+      button.reset {
+        grid-column: span 3;
+        background-color: #95a5a6;
+        color: white;
+        border: none;
+      }
+
+      .rule-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+      }
+      .rule-table th,
+      .rule-table td {
+        border: 1px solid #eee;
+        padding: 12px;
+        text-align: left;
+      }
+      .rule-table th {
+        background-color: #f8f9fa;
+      }
+      .unit-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background: #e1f5fe;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Derived Units: Building New Units</h1>
+    <p>
+      Just like building with LEGO blocks, we can combine simple units like
+      <b>meters (m)</b>, <b>kilograms (kg)</b>, and <b>seconds (s)</b> to create
+      new "Derived Units."
+    </p>
+    <section>
+      <h2>Section 1: The Connection Rules</h2>
+      <p>We use two main symbols to connect units:</p>
+      <table class="rule-table">
+        <thead>
+          <tr>
+            <th>Operation</th>
+            <th>Symbol</th>
+            <th>Example</th>
+            <th>How to read</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Multiplication (&times;)</td>
+            <td><b>&middot;</b> (dot)</td>
+            <td><i>m</i> &middot; <i>kg</i></td>
+            <td>"meter-kilograms"</td>
+          </tr>
+          <tr>
+            <td>Division (&divide;)</td>
+            <td><b>/</b> (slash)</td>
+            <td><i>m</i> / <i>s</i></td>
+            <td>"meters per second"</td>
+          </tr>
+        </tbody>
+      </table>
+      <div
+        style="
+          background-color: #fff9db;
+          padding: 10px;
+          border-radius: 5px;
+          margin-top: 1em;
+        "
+      >
+        <p style="margin: 0">
+          💡 <b>Note:</b> If you divide by many things, we use parentheses to
+          keep them together:<br />
+          <span
+            style="
+              font-size: 1.2rem;
+              font-family: 'Courier New', monospace;
+              margin-top: 5px;
+              display: inline-block;
+            "
+          >
+            <i>m</i> / (<i>kg</i> &middot; <i>s</i>)
+          </span>
+        </p>
+      </div>
+    </section>
+    <section>
+      <h2>Section 2: Unit Builder Lab</h2>
+      <p>
+        Click the buttons to combine units! Watch how <b>&times;</b> and
+        <b>&divide;</b> change the position.
+      </p>
+
+      <div
+        id="02-unit-process"
+        style="
+          font-family: 'Courier New', monospace;
+          font-size: 1.1rem;
+          text-align: center;
+          padding: 10px;
+          background-color: #fff;
+          border: 1px dashed #ccc;
+          border-radius: 8px 8px 0 0;
+          min-height: 1.5em;
+          color: #555;
+          overflow-x: auto;
+        "
+      >
+        1
+      </div>
+
+      <div
+        id="02-unit-display"
+        class="formula-box"
+        style="
+          border-top: 2px solid #34495e;
+          border-radius: 0 0 10px 10px;
+          margin-top: 0;
+          background-color: #f0f4f8;
+          overflow-x: auto;
+        "
+      >
+        1
+      </div>
+
+      <div class="controls">
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+            justify-content: center;
+          "
+        >
+          <span
+            style="
+              width: 100%;
+              text-align: center;
+              font-weight: bold;
+              color: #27ae60;
+            "
+            >Multiply (&times;)</span
+          >
+
+          <button id="02-btn-mul-m" class="multiply"><i>m</i></button>
+          <button id="02-btn-mul-kg" class="multiply"><i>kg</i></button>
+          <button id="02-btn-mul-s" class="multiply"><i>s</i></button>
+          <button id="02-btn-mul-N" class="multiply"><i>N</i></button>
+          <button id="02-btn-mul-Hz" class="multiply"><i>Hz</i></button>
+          <button id="02-btn-mul-Pa" class="multiply"><i>Pa</i></button>
+          <button id="02-btn-mul-T" class="multiply"><i>T</i></button>
+          <button id="02-btn-mul-B" class="multiply"><i>B</i></button>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+            justify-content: center;
+          "
+        >
+          <span
+            style="
+              width: 100%;
+              text-align: center;
+              font-weight: bold;
+              color: #e67e22;
+            "
+            >Divide (&divide;)</span
+          >
+          <button id="02-btn-div-m" class="divide"><i>m</i></button>
+          <button id="02-btn-div-kg" class="divide"><i>kg</i></button>
+          <button id="02-btn-div-s" class="divide"><i>s</i></button>
+          <button id="02-btn-div-N" class="divide"><i>N</i></button>
+          <button id="02-btn-div-Hz" class="divide"><i>Hz</i></button>
+          <button id="02-btn-div-Pa" class="divide"><i>Pa</i></button>
+          <button id="02-btn-div-T" class="divide"><i>T</i></button>
+          <button id="02-btn-div-B" class="divide"><i>B</i></button>
+        </div>
+
+        <button id="02-btn-reset" class="reset">CLEAR ALL</button>
+      </div>
+    </section>
+
+    <script type="module" src="dist/06-sec2.js"></script>
+  </body>
+</html>

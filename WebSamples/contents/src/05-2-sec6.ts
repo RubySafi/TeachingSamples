@@ -43,7 +43,7 @@ const QUIZ_PATTERNS: RelativePattern[] = [
       { x: -1, y: -1 },
       { x: 1, y: -1 },
     ],
-    pivotIndex: 2,
+    pivotIndex: 0,
   },
   {
     name: 'V-Shape', // V型（L字の3x3版）：角を赤に

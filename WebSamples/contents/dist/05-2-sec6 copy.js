@@ -1,26 +1,138 @@
 const TILE_SIZE = 30;
 const GRID_CENTER = 2;
-// 最初は Lミノのバリエーションでテスト
 const QUIZ_PATTERNS = [
+    // --- Pentominoes (ペントミノ) ---
     {
-        name: 'L-Standard',
+        name: 'P-Shape', // P型：密集している部分の角を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
+            { x: 0, y: -1 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'X-Shape', // X型（十字）：中心を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: -1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: -1 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'U-Shape', // U型：底の端を赤に。回転すると向きが混乱しやすい
+        coords: [
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: -1, y: 0 },
+            { x: -1, y: -1 },
+            { x: 1, y: -1 },
+        ],
+        pivotIndex: 2,
+    },
+    {
+        name: 'V-Shape', // V型（L字の3x3版）：角を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: 2, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: 2 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'T-Shape', // T型：頭の真ん中を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: -1, y: 0 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: 2 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'Z-Shape', // Z型：屈折点を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: -1, y: 0 },
+            { x: -1, y: -1 },
+            { x: 1, y: 0 },
+            { x: 1, y: 1 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'W-Shape', // W型：階段状の真ん中を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: -1, y: 0 },
+            { x: -1, y: -1 },
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'F-Shape', // F型：最も枝分かれが多い点を赤に（難問）
+        coords: [
+            { x: 0, y: 0 },
+            { x: 0, y: -1 },
+            { x: 1, y: -1 },
+            { x: 0, y: 1 },
+            { x: -1, y: 0 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'I-Shape', // I型（直線）：中心ではなく、端から2番目を赤に
         coords: [
             { x: 0, y: 0 },
             { x: 0, y: -1 },
             { x: 0, y: 1 },
-            { x: 1, y: 1 },
+            { x: 0, y: 2 },
+            { x: 0, y: -2 },
         ],
-        pivotIndex: 0, // 中心を赤に
+        pivotIndex: 1,
     },
     {
-        name: 'L-Corner',
+        name: 'Y-Shape', // Y型：枝分かれの付け根を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: -1, y: 0 },
+            { x: 1, y: 0 },
+            { x: 2, y: 0 },
+            { x: 0, y: 1 },
+        ],
+        pivotIndex: 0,
+    },
+    {
+        name: 'L-Long', // 長いL型：折れ曲がる角を赤に
         coords: [
             { x: 0, y: 0 },
             { x: 0, y: 1 },
             { x: 0, y: 2 },
-            { x: 1, y: 2 },
+            { x: 0, y: 3 },
+            { x: 1, y: 0 },
         ],
-        pivotIndex: 2, // 角を赤に
+        pivotIndex: 0,
+    },
+    {
+        name: 'N-Shape', // N型：少し複雑なジグザグ。中心を赤に
+        coords: [
+            { x: 0, y: 0 },
+            { x: -1, y: 0 },
+            { x: 0, y: -1 },
+            { x: 1, y: -1 },
+            { x: -2, y: 0 },
+        ],
+        pivotIndex: 0,
     },
 ];
 let currentPattern;
@@ -41,8 +153,8 @@ function rotateCoords(coords, degree) {
 /**
  * クイズ生成
  */
-function generateQuiz5() {
-    const questionText = document.getElementById('sec05-question-text');
+function generateQuiz6() {
+    const questionText = document.getElementById('sec06-question-text');
     // 1. パターンと角度を決定
     currentPattern =
         QUIZ_PATTERNS[Math.floor(Math.random() * QUIZ_PATTERNS.length)];
@@ -61,7 +173,7 @@ function generateQuiz5() {
  * 左側：問題図形の描画（矢印付き）
  */
 function drawBaseShape() {
-    const baseContainer = document.getElementById('sec05-base');
+    const baseContainer = document.getElementById('sec06-base');
     baseContainer.innerHTML = '';
     const pivot = currentPattern.coords[currentPattern.pivotIndex];
     currentPattern.coords.forEach((p, i) => {
@@ -80,7 +192,7 @@ function drawBaseShape() {
  * 右側：インタラクティブな解答グリッド
  */
 function initAnswerGrid() {
-    const ansGrid = document.getElementById('sec05-ans');
+    const ansGrid = document.getElementById('sec06-ans');
     ansGrid.innerHTML = '';
     userSelection = [];
     const rotatedCoords = rotateCoords(currentPattern.coords, currentTargetAngle);
@@ -130,10 +242,10 @@ function checkRealTimeAnswer() {
     // すべてのユーザー選択が正解リストに含まれているか
     const isAllCorrect = userSelection.every((u) => correctCoords.some((c) => c.x === u.x && c.y === u.y));
     if (isAllCorrect) {
-        const questionText = document.getElementById('sec05-question-text');
+        const questionText = document.getElementById('sec06-question-text');
         questionText.innerHTML += ` <span style="color:red; margin-left:15px; font-size:1.2rem;">★ Correct! ★</span>`;
         // 全タイルをクリック不可にする
-        const cells = document.querySelectorAll('#sec05-ans div');
+        const cells = document.querySelectorAll('#sec06-ans div');
         cells.forEach((c) => (c.onclick = null));
     }
 }
@@ -177,7 +289,7 @@ function createArrowElement(angleDeg) {
 }
 // 初期化
 document
-    .getElementById('sec05-btn-next')
-    ?.addEventListener('click', generateQuiz5);
-generateQuiz5();
+    .getElementById('sec06-btn-next')
+    ?.addEventListener('click', generateQuiz6);
+generateQuiz6();
 export {};

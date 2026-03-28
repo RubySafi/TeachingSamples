@@ -23,16 +23,6 @@ const QUIZ_PATTERNS: RelativePattern[] = [
     ],
     pivotIndex: 0,
   },
-  {
-    name: 'I-Edge', // 直線：端っこを赤に（回転半径が大きくなる）
-    coords: [
-      { x: 0, y: 0 },
-      { x: 0, y: 1 },
-      { x: 0, y: 2 },
-      { x: 0, y: 3 },
-    ],
-    pivotIndex: 0,
-  },
 
   // --- T-Tetromino (T字) ---
   {
