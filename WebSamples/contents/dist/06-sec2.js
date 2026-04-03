@@ -17,10 +17,20 @@ const updateDisplay = () => {
             .map((item, index) => {
             const isLast = index === history.length - 1;
             const style = isLast ? 'style="color: red; font-weight: bold;"' : '';
-            const symbol = index === 0 ? '' : item.op === 'mul' ? ' &times; ' : ' &divide; ';
+            let symbol = '';
+            if (index === 0) {
+                // 最初の要素が割り算なら ÷ を表示。掛け算なら空文字（1 m... となる）
+                symbol = item.op === 'div' ? ' &divide; ' : ' ';
+            }
+            else {
+                // 2番目以降は通常通り
+                symbol = item.op === 'mul' ? ' &times; ' : ' &divide; ';
+            }
             return `${symbol}<span ${style}>1 <i>${item.unit}</i></span>`;
         })
             .join('');
+        // 先頭に "1" を明示的に追加することで "1 ÷ 1 m" という表現を完成させる
+        processDisplay.innerHTML = '1' + processDisplay.innerHTML;
     }
     // --- 2. 集計 ---
     const counts = {};
