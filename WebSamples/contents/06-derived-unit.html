@@ -253,6 +253,197 @@
       </div>
     </section>
 
+    <section
+      id="sec03-quiz-container"
+      style="
+        max-width: 600px;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 12px;
+        background-color: #fff;
+      "
+    >
+      <h2 style="text-align: center; color: #2c3e50">Section 3: Unit Quiz</h2>
+      <p style="text-align: center; color: #7f8c8d">
+        Choose the correct unit combination based on the calculation!
+      </p>
+
+      <div
+        id="sec03-question-box"
+        style="
+          font-family: 'Courier New', monospace;
+          font-size: 1.4rem;
+          text-align: center;
+          padding: 25px;
+          background-color: #f1f3f5;
+          border: 2px solid #34495e;
+          border-radius: 10px;
+          margin-bottom: 20px;
+          min-height: 2em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <span id="sec03-question-text">Select a Level to Start!</span>
+      </div>
+
+      <div
+        id="sec03-choices-container"
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 20px;
+        "
+      >
+        <button
+          id="sec03-choice-0"
+          class="quiz-choice"
+          style="
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+          "
+        >
+          -
+        </button>
+        <button
+          id="sec03-choice-1"
+          class="quiz-choice"
+          style="
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+          "
+        >
+          -
+        </button>
+        <button
+          id="sec03-choice-2"
+          class="quiz-choice"
+          style="
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+          "
+        >
+          -
+        </button>
+        <button
+          id="sec03-choice-3"
+          class="quiz-choice"
+          style="
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+          "
+        >
+          -
+        </button>
+      </div>
+
+      <div
+        id="sec03-feedback"
+        style="
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.3rem;
+          min-height: 1.6em;
+          margin-bottom: 20px;
+          transition: color 0.3s;
+        "
+      ></div>
+
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 15px;
+          margin-bottom: 30px;
+        "
+      >
+        <button
+          id="sec03-btn-next"
+          style="
+            padding: 12px 40px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+          "
+        >
+          Next Question &raquo;
+        </button>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px" />
+
+      <div style="text-align: center">
+        <p style="font-size: 0.9rem; color: #95a5a6; margin-bottom: 10px">
+          Difficulty Level:
+        </p>
+        <div style="display: flex; justify-content: center; gap: 8px">
+          <button
+            id="sec03-lv-1"
+            style="
+              padding: 5px 15px;
+              border-radius: 20px;
+              border: 1px solid #3498db;
+              background: white;
+              cursor: pointer;
+              font-size: 0.85rem;
+            "
+          >
+            Level 1
+          </button>
+          <button
+            id="sec03-lv-2"
+            style="
+              padding: 5px 15px;
+              border-radius: 20px;
+              border: 1px solid #3498db;
+              background: white;
+              cursor: pointer;
+              font-size: 0.85rem;
+            "
+          >
+            Level 2
+          </button>
+          <button
+            id="sec03-lv-3"
+            style="
+              padding: 5px 15px;
+              border-radius: 20px;
+              border: 1px solid #3498db;
+              background: white;
+              cursor: pointer;
+              font-size: 0.85rem;
+            "
+          >
+            Level 3
+          </button>
+        </div>
+      </div>
+    </section>
+
     <script type="module" src="dist/06-sec2.js"></script>
+    <script type="module" src="dist/06-sec3.js"></script>
   </body>
 </html>

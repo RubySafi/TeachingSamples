@@ -101,6 +101,7 @@ const QUIZ_PATTERNS = [
 let currentPattern;
 let currentTargetAngle;
 let userSelection = [];
+let isHintRunning = false;
 /**
  * 座標回転関数
  */
@@ -150,6 +151,54 @@ function drawBaseShape() {
         }
         baseContainer.appendChild(div);
     });
+}
+/**
+ * Section 5 用ヒント実行
+ */
+function runHint5() {
+    // 実行中またはクイズ未生成ならガード
+    if (isHintRunning || !currentPattern)
+        return;
+    isHintRunning = true;
+    const baseContainer = document.getElementById('sec05-base');
+    baseContainer.innerHTML = ''; // 一旦クリア
+    const animWrapper = document.createElement('div');
+    // Section 7 と共通のテンポ設定
+    const durationSec = 1.2;
+    const stopTimeSec = 1.0;
+    const easing = 'cubic-bezier(0.4, 0, 0.2, 1)';
+    animWrapper.style.cssText = `
+    position:absolute; 
+    width:100%; 
+    height:100%; 
+    top:0; 
+    left:0; 
+    transform-origin:center center;
+    transition: transform ${durationSec}s ${easing};
+  `;
+    // 現在のパターンをゴースト描画
+    currentPattern.coords.forEach((p, i) => {
+        const div = createTileElement(p.x, p.y);
+        div.style.backgroundColor =
+            i === currentPattern.pivotIndex
+                ? 'rgba(231, 76, 60, 0.7)'
+                : 'rgba(189, 195, 199, 0.5)';
+        if (i === currentPattern.pivotIndex)
+            div.style.borderRadius = '4px';
+        animWrapper.appendChild(div);
+    });
+    baseContainer.appendChild(animWrapper);
+    // 回転開始
+    setTimeout(() => {
+        // Note: 角度の正負は Section 7 と同じルールで動きます
+        animWrapper.style.transform = `rotate(${currentTargetAngle}deg)`;
+    }, 50);
+    // 終了処理
+    const totalWaitMs = (durationSec + stopTimeSec) * 1000;
+    setTimeout(() => {
+        drawBaseShape(); // 静止画に戻す
+        isHintRunning = false;
+    }, totalWaitMs);
 }
 /**
  * 右側：インタラクティブな解答グリッド
@@ -255,4 +304,5 @@ document
     .getElementById('sec05-btn-next')
     ?.addEventListener('click', generateQuiz5);
 generateQuiz5();
+document.getElementById('sec05-btn-hint')?.addEventListener('click', runHint5);
 export {};
