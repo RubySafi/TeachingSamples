@@ -27,17 +27,35 @@ const updateDisplay = () => {
   if (history.length === 0) {
     processDisplay.innerHTML = '1';
   } else {
-    processDisplay.innerHTML = history
+    let processHtml = '';
+
+    // 最初の操作を確認
+    const firstOp = history[0].op;
+
+    if (firstOp === 'div') {
+      // 割り算から始まる場合は "1 ÷" を最初に出す
+      processHtml = '1';
+    } else {
+      // 掛け算から始まる場合は "1" を出さず、空文字からスタート
+      // これにより、最初の要素のループ内で "1 unit" だけが出るようにする
+      processHtml = '';
+    }
+
+    const itemsHtml = history
       .map((item, index) => {
         const isLast = index === history.length - 1;
         const style = isLast ? 'style="color: red; font-weight: bold;"' : '';
 
         let symbol = '';
         if (index === 0) {
-          // 最初の要素が割り算なら ÷ を表示。掛け算なら空文字（1 m... となる）
-          symbol = item.op === 'div' ? ' &divide; ' : ' ';
+          // 最初の要素
+          if (item.op === 'div') {
+            symbol = ' &divide; '; // "1 ÷ 1 m"
+          } else {
+            symbol = ''; // 掛け算なら記号なし。結果的に "1 m" から始まる
+          }
         } else {
-          // 2番目以降は通常通り
+          // 2番目以降
           symbol = item.op === 'mul' ? ' &times; ' : ' &divide; ';
         }
 
@@ -45,8 +63,7 @@ const updateDisplay = () => {
       })
       .join('');
 
-    // 先頭に "1" を明示的に追加することで "1 ÷ 1 m" という表現を完成させる
-    processDisplay.innerHTML = '1' + processDisplay.innerHTML;
+    processDisplay.innerHTML = processHtml + itemsHtml;
   }
 
   // --- 2. 集計 ---
