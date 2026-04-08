@@ -109,7 +109,7 @@ const QUIZ_PATTERNS: RelativePattern[] = [
       { x: 0, y: 2 },
       { x: 0, y: -2 },
     ],
-    pivotIndex: 1,
+    pivotIndex: 0,
   },
   {
     name: 'Y-Shape', // Y型：枝分かれの付け根を赤に
