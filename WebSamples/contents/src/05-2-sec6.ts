@@ -125,13 +125,13 @@ const QUIZ_PATTERNS: RelativePattern[] = [
   {
     name: 'L-Long', // 長いL型：折れ曲がる角を赤に
     coords: [
-      { x: 0, y: 0 },
-      { x: 0, y: 1 },
-      { x: 0, y: 2 },
-      { x: 0, y: 3 },
+      { x: 1, y: 1 },
       { x: 1, y: 0 },
+      { x: 0, y: 0 },
+      { x: -1, y: 0 },
+      { x: -2, y: 0 },
     ],
-    pivotIndex: 0,
+    pivotIndex: 2,
   },
   {
     name: 'N-Shape', // N型：少し複雑なジグザグ。中心を赤に
