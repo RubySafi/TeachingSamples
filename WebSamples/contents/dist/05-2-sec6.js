@@ -99,7 +99,7 @@ const QUIZ_PATTERNS = [
             { x: 0, y: 2 },
             { x: 0, y: -2 },
         ],
-        pivotIndex: 1,
+        pivotIndex: 0,
     },
     {
         name: 'Y-Shape', // Y型：枝分かれの付け根を赤に
@@ -116,10 +116,10 @@ const QUIZ_PATTERNS = [
         name: 'L-Long', // 長いL型：折れ曲がる角を赤に
         coords: [
             { x: 0, y: 0 },
-            { x: 0, y: 1 },
-            { x: 0, y: 2 },
-            { x: 0, y: 3 },
+            { x: 1, y: 1 },
             { x: 1, y: 0 },
+            { x: -1, y: 0 },
+            { x: -2, y: 0 },
         ],
         pivotIndex: 0,
     },

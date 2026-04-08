@@ -214,9 +214,12 @@ const patterns = [
         level: 2,
         requiredUnits: 2,
         generate: ([u1, u2], [n1, n2, n3]) => {
-            const res = Math.floor((n1 * n2) / n3);
+            const val3 = n3;
+            const val1 = n3 * getRandomInt(2, 4);
+            const val2 = n2;
+            const res = (val1 * val2) / val3;
             return {
-                questionHtml: `${n1} <i>${u1}</i> &times; ${n2} <i>${u1}</i> &divide; ${n3} <i>${u2}</i> = ?`,
+                questionHtml: `${val1} <i>${u1}</i> &times; ${val2} <i>${u1}</i> &divide; ${val3} <i>${u2}</i> = ?`,
                 choices: [
                     `${res} ${u1}<sup>2</sup>/${u2}`,
                     `${res} ${u1}/${u2}`,
@@ -232,30 +235,38 @@ const patterns = [
         level: 2,
         requiredUnits: 2,
         generate: ([u1, u2], [n1, n2, n3]) => {
-            const res = Math.floor((n1 / n2) * n3);
+            // 修正：n1 を n2 の倍数にする
+            const val2 = n2;
+            const val1 = n2 * getRandomInt(2, 4);
+            const val3 = n3;
+            const res = (val1 / val2) * val3;
             return {
-                questionHtml: `${n1} <i>${u1}</i> &divide; ${n2} <i>${u2}</i> &times; ${n3} <i>${u1}</i> = ?`,
+                questionHtml: `${val1} <i>${u1}</i> &divide; ${val2} <i>${u2}</i> &times; ${val3} <i>${u1}</i> = ?`,
                 choices: [
-                    `${res} ${u1}<sup>2</sup>/${u2}`, // 正解
-                    `${res} ${u1}/(${u2}·${u1})`, // 誤答：最後を分母へ
+                    `${res} ${u1}<sup>2</sup>/${u2}`,
+                    `${res} ${u1}/(${u2}·${u1})`,
                     `${res} ${u1}/${u2}`,
                     `${res} ${u1}·${u2}·${u1}`,
                 ],
             };
         },
     },
-    // 【Lv2】b / a / a 型 -> b / a^2
+    // 【Lv2】b / a / a 型 -> b / (a^2)
     {
         id: 'lv2_div_div_same',
         level: 2,
         requiredUnits: 2,
         generate: ([u1, u2], [n1, n2, n3]) => {
-            const res = Math.floor(n1 / (n2 * n3));
+            // 修正：n2 * n3 の倍数を n1 に設定して確実に割り切れるようにする
+            const val2 = n2;
+            const val3 = n3;
+            const val1 = val2 * val3 * getRandomInt(2, 4);
+            const res = val1 / (val2 * val3);
             return {
-                questionHtml: `${n1} <i>${u2}</i> &divide; ${n2} <i>${u1}</i> &divide; ${n3} <i>${u1}</i> = ?`,
+                questionHtml: `${val1} <i>${u2}</i> &divide; ${val2} <i>${u1}</i> &divide; ${val3} <i>${u1}</i> = ?`,
                 choices: [
-                    `${res} ${u2}/${u1}<sup>2</sup>`, // 正解
-                    `${res} ${u2}·${u1}<sup>2</sup>`, // 誤答：全部掛け算
+                    `${res} ${u2}/(${u1}<sup>2</sup>)`, // 正解：括弧で分母を明示
+                    `${res} ${u2}·${u1}<sup>2</sup>`, // 誤答：掛け算
                     `${res} ${u2}/${u1}`, // 誤答：指数忘れ
                     `${res} ${u1}<sup>2</sup>/${u2}`, // 誤答：上下逆
                 ],
@@ -474,10 +485,12 @@ const patterns = [
         level: 3,
         requiredUnits: 2,
         generate: ([u1, u2], [n1, n2, n3, n4]) => {
-            const val1 = n4 * getRandomInt(2, 4);
-            const res = (val1 * n2 * n3) / n4;
+            const val4 = n4;
+            const val1 = val4 * getRandomInt(2, 4); // 分母の倍数を確実に作成
+            const res = (val1 * n2 * n3) / val4;
             return {
-                questionHtml: `${n1} <i>${u1}</i> &times; ${n2} <i>${u1}</i> &times; ${n3} <i>${u1}</i> &divide; ${n4} <i>${u2}</i> = ?`,
+                // questionHtml の最初の数値を val1 に変更
+                questionHtml: `${val1} <i>${u1}</i> &times; ${n2} <i>${u1}</i> &times; ${n3} <i>${u1}</i> &divide; ${val4} <i>${u2}</i> = ?`,
                 choices: [
                     `${res} ${u1}<sup>3</sup>/${u2}`,
                     `${res} ${u1}<sup>3</sup>·${u2}`,
