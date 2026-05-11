@@ -2,36 +2,419 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Long Division Final View</title>
+    <title>Long Division</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      /* ── Design tokens ── */
+      :root {
+        --bg: #f4f1eb;
+        --paper: #fffef9;
+        --ink: #2c2416;
+        --ink-mid: #5a4e3a;
+        --ink-light: #9a8c74;
+        --rule: #ddd6c4;
+        --accent: #c0392b;
+        --blue: #2980b9;
+        --green: #27ae60;
+        --shadow: rgba(44, 36, 22, 0.1);
+
+        --section-radius: 10px;
+        --page-max: 960px;
+      }
+
+      /* ── Reset ── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ── Page ── */
       body {
-        font-family: sans-serif;
-        padding: 2em;
-        background-color: #f9f9f9;
-        text-align: center;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg);
+        background-image: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 27px,
+          var(--rule) 27px,
+          var(--rule) 28px
+        );
+        min-height: 100vh;
+        color: var(--ink);
+        padding: 2.5em 1.5em 4em;
       }
-      .container {
-        background: #fff;
-        padding: 2.5em;
-        display: inline-block;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+      .page-wrapper {
+        max-width: var(--page-max);
+        margin: 0 auto;
       }
-      canvas {
-        background-color: #fafafa;
-        border: 1px solid #e0e0e0;
+
+      /* ── Page title ── */
+      .page-title {
+        font-family: 'Lora', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--ink);
+        border-bottom: 3px solid var(--ink);
+        padding-bottom: 0.4em;
+        margin-bottom: 0.35em;
+      }
+
+      .page-subtitle {
+        font-size: 0.95rem;
+        color: var(--ink-mid);
+        margin-bottom: 2.5em;
+        line-height: 1.6;
+      }
+
+      /* ── Section card ── */
+      .section-card {
+        background: var(--paper);
+        border: 1px solid var(--rule);
+        border-radius: var(--section-radius);
+        box-shadow: 0 2px 12px var(--shadow);
+        margin-bottom: 2.5em;
+        overflow: hidden;
+      }
+
+      .section-header {
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.9em 1.6em;
+        display: flex;
+        align-items: baseline;
+        gap: 0.8em;
+      }
+
+      .section-number {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72em;
+        opacity: 0.55;
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+      }
+
+      .section-title {
+        font-family: 'Lora', serif;
+        font-size: 1.15em;
+        font-weight: 600;
+      }
+
+      .section-body {
+        padding: 1.6em 2em 2em;
+      }
+
+      .section-body p {
+        font-size: 0.97rem;
+        line-height: 1.75;
+        color: var(--ink-mid);
+        margin-bottom: 1.4em;
+      }
+
+      /* ── Notebook widget (canvas + caption side by side) ── */
+      .notebook-widget {
+        display: flex;
+        gap: 1.8em;
+        align-items: flex-start;
+        background: var(--paper);
+        border: 1px solid var(--rule);
         border-radius: 8px;
-        margin-top: 1.5em;
+        overflow: hidden;
+      }
+
+      /* left: dark header strip + canvas */
+      .notebook-canvas-col {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .notebook-topbar {
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.75em 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1em;
+      }
+
+      .problem-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.25em;
+        font-weight: 600;
+        color: #fff;
+        white-space: nowrap;
+      }
+
+      .btn-new {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75em;
+        font-weight: 600;
+        padding: 0.4em 0.9em;
+        border: 1.5px solid rgba(255, 255, 255, 0.35);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        border-radius: 3px;
+        cursor: pointer;
+        letter-spacing: 0.06em;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        white-space: nowrap;
+      }
+      .btn-new:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+      }
+
+      .canvas-wrap {
+        padding: 0.8em 1em 1em;
+        /* red margin line, purely decorative */
+        border-left: 4px solid rgba(192, 57, 43, 0.18);
+      }
+
+      canvas {
+        display: block;
+      }
+
+      /* Navigation bar below canvas */
+      .nav-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.7em 1em;
+        border-top: 1px solid var(--rule);
+      }
+
+      .btn-nav {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.82em;
+        font-weight: 600;
+        padding: 0.5em 1.2em;
+        border: 2px solid var(--ink);
+        background: transparent;
+        color: var(--ink);
+        border-radius: 3px;
+        cursor: pointer;
+        letter-spacing: 0.04em;
+        transition:
+          background 0.15s,
+          color 0.15s,
+          transform 0.1s;
+        user-select: none;
+      }
+      .btn-nav:hover:not(:disabled) {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .btn-nav:active:not(:disabled) {
+        transform: scale(0.95);
+      }
+      .btn-nav:disabled {
+        opacity: 0.25;
+        cursor: default;
+      }
+
+      .step-indicator {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78em;
+        color: var(--ink-light);
+        letter-spacing: 0.06em;
+      }
+
+      /* Progress dots */
+      .progress-dots {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: center;
+        padding: 0.6em 1em 0.9em;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--rule);
+        transition: background 0.2s;
+        cursor: pointer;
+      }
+      .dot:hover {
+        background: var(--ink-light);
+      }
+      .dot.active {
+        background: var(--ink);
+      }
+      .dot.done {
+        background: var(--ink-light);
+      }
+
+      /* right: caption column */
+      .notebook-caption-col {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 1.4em 1.6em 1.4em 0;
+        /* push caption to the vertical middle of the canvas height */
+        min-height: 420px;
+      }
+
+      .caption-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.68em;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: var(--blue);
+        margin-bottom: 0.5em;
+      }
+
+      /* Fixed-height caption box — no layout shift */
+      .caption-box {
+        height: 140px; /* tall enough for ~5 lines */
+        overflow-y: auto;
+        padding: 0.8em 1em;
+        background: rgba(41, 128, 185, 0.05);
+        border-left: 3px solid var(--blue);
+        border-radius: 0 5px 5px 0;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--ink);
+      }
+
+      /* colour key legend */
+      .colour-key {
+        margin-top: 1.6em;
+      }
+      .colour-key-title {
+        font-size: 0.75em;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--ink-light);
+        margin-bottom: 0.6em;
+        text-transform: uppercase;
+      }
+      .colour-key-item {
+        display: flex;
+        align-items: center;
+        gap: 0.55em;
+        font-size: 0.82rem;
+        color: var(--ink-mid);
+        margin-bottom: 0.38em;
+      }
+      .colour-swatch {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* ── Placeholder for Section 2 ── */
+      .placeholder {
+        text-align: center;
+        padding: 3em 2em;
+        color: var(--ink-light);
+        font-size: 0.95rem;
+        border: 2px dashed var(--rule);
+        border-radius: 6px;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>Long Division: 1000 &divide; 7</h1>
-      <p>Corrected Final View</p>
+    <div class="page-wrapper">
+      <!-- Page heading -->
+      <h1 class="page-title">Long Division</h1>
+      <p class="page-subtitle">
+        Long division is a step-by-step method for dividing large numbers by
+        hand. Work through each section below to learn how it works.
+      </p>
 
-      <canvas id="division-canvas" width="400" height="550"></canvas>
+      <!-- ══════════════════════════════════════
+           Section 1 — The Long Division Method
+      ══════════════════════════════════════ -->
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-number">SECTION 01</span>
+          <span class="section-title">The Long Division with Remainder</span>
+        </div>
+        <div class="section-body">
+          <p>
+            We can solve a division problem step by step using a written method
+            called
+            <strong>long division</strong>. Press <em>Next →</em> to walk
+            through each stage, or click any dot to jump to that step. Use
+            <em>New ↺</em> to get a different problem.
+          </p>
+
+          <!-- Notebook widget -->
+          <div class="notebook-widget">
+            <!-- Left column: top-bar + canvas + nav + dots -->
+            <div class="notebook-canvas-col">
+              <div class="notebook-topbar">
+                <span class="problem-title" id="problem-title">? ÷ ? = ?</span>
+                <button class="btn-new" id="btn-new">New ↺</button>
+              </div>
+              <div class="canvas-wrap" style="zoom: 80%">
+                <canvas id="division-canvas" width="380" height="520"></canvas>
+              </div>
+              <div class="nav-bar">
+                <button class="btn-nav" id="btn-back" disabled>← Back</button>
+                <span class="step-indicator" id="step-indicator">0 / —</span>
+                <button class="btn-nav" id="btn-forward">Next →</button>
+              </div>
+              <div class="progress-dots" id="progress-dots"></div>
+            </div>
+
+            <!-- Right column: caption + colour key -->
+            <div class="notebook-caption-col">
+              <div class="caption-label" id="caption-step">STEP 0</div>
+              <div class="caption-box" id="caption-text">Loading…</div>
+
+              <div class="colour-key">
+                <div class="colour-key-title">Colour Guide</div>
+                <div class="colour-key-item">
+                  <div class="colour-swatch" style="background: #c0392b"></div>
+                  Quotient digit / final remainder
+                </div>
+                <div class="colour-key-item">
+                  <div class="colour-swatch" style="background: #2980b9"></div>
+                  Product (divisor × quotient digit)
+                </div>
+                <div class="colour-key-item">
+                  <div class="colour-swatch" style="background: #27ae60"></div>
+                  Carry-down number
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.notebook-widget -->
+        </div>
+        <!-- /.section-body -->
+      </div>
+      <!-- /.section-card -->
+
+      <!-- ══════════════════════════════════════
+           Section 2 — Practice  (placeholder)
+      ══════════════════════════════════════ -->
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-number">SECTION 02</span>
+          <span class="section-title">Practice</span>
+        </div>
+        <div class="section-body">
+          <div class="placeholder">
+            ✏️ &nbsp; Practice problems coming soon.
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- /.page-wrapper -->
 
     <script type="module" src="dist/07-sec1.js"></script>
   </body>

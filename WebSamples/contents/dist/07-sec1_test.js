@@ -81,19 +81,8 @@ function generateSteps(dividend, divisor, seq) {
             digitIndex: i,
         });
         if (q === 0) {
-            if (isLast) {
-                // Last digit is 0: no subtraction steps, but we still need a conclusion.
-                steps.push({
-                    type: 'conclusion',
-                    label: `STEP ${steps.length}`,
-                    caption: remainderFull === 0
-                        ? `The ones digit of the quotient is 0, so it divides evenly! The answer is ${dividend} ÷ ${divisor} = ${quotientFull}.`
-                        : `The ones digit of the quotient is 0. The answer is ${dividend} ÷ ${divisor} = ${quotientFull} remainder ${remainderFull}.`,
-                    digitIndex: i,
-                });
-            }
-            else {
-                // Not last: skip product / line / diff, but still bring down the next digit.
+            // skip product / line / diff, but still bring down the next digit
+            if (!isLast) {
                 steps.push({
                     type: 'carry',
                     label: `STEP ${steps.length}`,
@@ -123,8 +112,8 @@ function generateSteps(dividend, divisor, seq) {
             label: `STEP ${steps.length}`,
             caption: isLast
                 ? subtractionSeq[i] === 0
-                    ? `Write the difference: the remainder is 0, so it divides evenly! The answer is ${dividend} ÷ ${divisor} = ${quotientFull}.`
-                    : `Write the difference: ${subtractionSeq[i]}. This is the remainder. The answer is ${dividend} ÷ ${divisor} = ${quotientFull} remainder ${remainderFull}.`
+                    ? `Write the difference: 0. ${dividend} ÷ ${divisor} divides evenly! The answer is ${quotientFull}.`
+                    : `Write the difference: ${subtractionSeq[i]}. This is the remainder. The answer is ${quotientFull} remainder ${remainderFull}.`
                 : `Write the difference: ${subtractionSeq[i]}.`,
             digitIndex: i,
         });
@@ -357,18 +346,11 @@ function render(canvas, steps, upToStep, dividend, divisor, seq) {
                 h.putMainTextAtPlace(seq.subtractionSeq[i], rowBase + 2, place, color);
                 break;
             }
-            case 'conclusion': {
-                // No new drawing — the answer statement is shown in the caption only.
-                break;
-            }
             case 'carry': {
                 // carry = totalSeq[i+1], right-aligned to place of digit i+1
                 // It sits on the same row as diff (rowBase + 2),
                 // but if q[i] == 0 there is no product row, so carry sits at rowBase + 1.
-                // q==0: no product/diff rows were opened for this digit,
-                // so the carry lands on the previous active block's diff row = rowBase.
-                // q!=0: carry lands just below this digit's diff row = rowBase + 2.
-                const carryRow = seq.quotientSeq[i] === 0 ? rowBase : rowBase + 2;
+                const carryRow = seq.quotientSeq[i] === 0 ? rowBase + 1 : rowBase + 2;
                 const nextPlace = numDigits - 1 - (i + 1); // place of digit i+1
                 const color = isCurrentStep ? '#27ae60' : '#2c2416';
                 h.putMainTextAtPlace(seq.totalSeq[i + 1], carryRow, nextPlace, color);
