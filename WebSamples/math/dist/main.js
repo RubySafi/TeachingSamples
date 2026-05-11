@@ -6,30 +6,148 @@ const TICK_MS = 100; // タイマー刻み (0.1秒)
 // --- クイズデータ（LaTeX形式） ---
 // question / answer / wrongCandidates はすべて $ ... $ で囲んで表示
 const QUIZ_DATA = [
+    // d/dx(x)
     {
-        question: '$\\dfrac{d}{dx}(x^n)$',
-        answer: '$nx^{n-1}$',
-        wrongCandidates: ['$x^{n+1}$', '$nx^n$', '$(n-1)x$', '$x^n$', '$nx$'],
+        question: '$\\dfrac{d}{dx}(x)$',
+        answer: '$1$',
+        wrongCandidates: ['$x$', '$0$', '$2x$', '$\\dfrac{1}{2}x^2$', '$x^2$'],
     },
+    // d/dx(x^a)
+    {
+        question: '$\\dfrac{d}{dx}(x^a)$',
+        answer: '$ax^{a-1}$',
+        wrongCandidates: [
+            '$x^{a+1}$',
+            '$ax^a$',
+            '$(a-1)x$',
+            '$\\frac{1}{a+1}x^{a+1}$',
+            '$x^{a-1}$',
+            '$a^x \\log a$',
+        ],
+    },
+    // d/dx(sin x)
     {
         question: '$\\dfrac{d}{dx}(\\sin x)$',
         answer: '$\\cos x$',
-        wrongCandidates: ['$-\\cos x$', '$\\tan x$', '$\\sec x$', '$-\\sin x$', '$1$'],
+        wrongCandidates: [
+            '$-\\cos x$',
+            '$\\tan x$',
+            '$\\dfrac{1}{\\cos x}$',
+            '$-\\sin x$',
+            '$\\sin 1$',
+        ],
     },
+    // d/dx(cos x)
     {
         question: '$\\dfrac{d}{dx}(\\cos x)$',
         answer: '$-\\sin x$',
-        wrongCandidates: ['$\\sin x$', '$\\cos x$', '$-\\cos x$', '$\\tan x$', '$0$'],
+        wrongCandidates: [
+            '$\\sin x$',
+            '$\\cos x$',
+            '$-\\cos x$',
+            '$\\tan x$',
+            '$\\cos 1$',
+        ],
     },
+    // d/dx(tan x)
+    {
+        question: '$\\dfrac{d}{dx}(\\tan x)$',
+        answer: '$\\dfrac{1}{\\cos^2 x}$',
+        wrongCandidates: [
+            '$\\dfrac{1}{\\sin^2 x}$',
+            '$\\dfrac{-1}{\\cos^2 x}$',
+            '$\\dfrac{1}{\\cos x}$',
+            '$\\dfrac{1}{\\sin x}$',
+            '$\\dfrac{-1}{\\cos x}$',
+            '$\\dfrac{-1}{\\sin x}$',
+            '$\\dfrac{-1}{\\sin^2 x}$',
+        ],
+    },
+    // d/dx(1/tan x)
+    {
+        question: '$\\dfrac{d}{dx}\\!\\left(\\dfrac{1}{\\tan x}\\right)$',
+        answer: '$\\dfrac{-1}{\\sin^2 x}$',
+        wrongCandidates: [
+            '$\\dfrac{1}{\\sin^2 x}$',
+            '$\\dfrac{1}{\\cos^2 x}$',
+            '$\\dfrac{-1}{\\cos^2 x}$',
+            '$\\dfrac{1}{\\cos x}$',
+            '$\\dfrac{1}{\\sin x}$',
+            '$\\dfrac{-1}{\\cos x}$',
+            '$\\dfrac{-1}{\\sin x}$',
+        ],
+    },
+    // d/dx(e^x)
     {
         question: '$\\dfrac{d}{dx}(e^x)$',
         answer: '$e^x$',
-        wrongCandidates: ['$xe^{x-1}$', '$\\log x$', '$\\dfrac{1}{x}$', '$e^{-x}$', '$0$'],
+        wrongCandidates: [
+            '$xe^{x-1}$',
+            '$\\log x$',
+            '$\\dfrac{1}{x}$',
+            '$e$',
+            '$0$',
+        ],
     },
+    // d/dx(a^x)
+    {
+        question: '$\\dfrac{d}{dx}(a^x)$',
+        answer: '$a^x \\log a$',
+        wrongCandidates: [
+            '$a^x$',
+            '$xa^{x-1}$',
+            '$a^x \\log x$',
+            '$\\log a$',
+            '$a^x / \\log a$',
+        ],
+    },
+    // d/dx(log x)  ← 自然対数
     {
         question: '$\\dfrac{d}{dx}(\\log x)$',
         answer: '$\\dfrac{1}{x}$',
-        wrongCandidates: ['$e^x$', '$\\dfrac{1}{x\\log e}$', '$x$', '$\\log x$', '$1$'],
+        wrongCandidates: [
+            '$\\log x$',
+            '$x \\log x$',
+            '$\\dfrac{\\log x}{x}$',
+            '$\\dfrac{1}{x \\log a}$',
+            '$1$',
+        ],
+    },
+    // d/dx(log_a x)
+    {
+        question: '$\\dfrac{d}{dx}(\\log_a x)$',
+        answer: '$\\dfrac{1}{x \\log a}$',
+        wrongCandidates: [
+            '$\\dfrac{1}{x}$',
+            '$\\dfrac{\\log a}{x}$',
+            '$\\dfrac{1}{x \\log x}$',
+            '$\\dfrac{\\log_a x}{x}$',
+            '$\\log_a e$',
+        ],
+    },
+    // d/dx(log|x|)
+    {
+        question: '$\\dfrac{d}{dx}(\\log|x|)$',
+        answer: '$\\dfrac{1}{x}$',
+        wrongCandidates: [
+            '$\\dfrac{1}{|x|}$',
+            '$\\dfrac{|x|}{x}$',
+            '$\\dfrac{1}{x^2}$',
+            '$\\log|x| \\cdot \\dfrac{1}{x}$',
+            '$\\dfrac{1}{x \\log a}$',
+        ],
+    },
+    // d/dx(log_a|x|)
+    {
+        question: '$\\dfrac{d}{dx}(\\log_a|x|)$',
+        answer: '$\\dfrac{1}{x \\log a}$',
+        wrongCandidates: [
+            '$\\dfrac{1}{x}$',
+            '$\\dfrac{1}{|x| \\log a}$',
+            '$\\dfrac{\\log a}{x}$',
+            '$\\dfrac{1}{x \\log x}$',
+            '$\\dfrac{1}{|x|}$',
+        ],
     },
 ];
 let currentMode = null;
@@ -38,6 +156,7 @@ let timerId = null;
 let timeLeftMs = 0; // ミリ秒管理
 let totalSolvedCount = 0;
 let statsMap = new Map();
+let currentChoices = []; // 現在の問題の選択肢（再挑戦時に位置シャッフルのみ行う）
 const getById = (id) => document.getElementById(id);
 const timerDisplay = getById('timer-display');
 const feedbackText = getById('feedback-text');
@@ -85,18 +204,37 @@ const renderQuestion = async () => {
     await typeset(qEl);
     feedbackText.textContent = '';
     feedbackText.className = '';
+    // 新しい問題では選択肢を新規生成（4択を確定させて状態に保存）
+    currentChoices = shuffle([
+        quiz.answer,
+        ...shuffle(quiz.wrongCandidates).slice(0, 3),
+    ]);
+    await renderChoices();
+    if (currentMode === 'standard') {
+        timeLeftMs = TIME_LIMIT_ST * 1000;
+        startQuestionTimer();
+    }
+};
+// 選択肢の描画（currentChoices の順序で表示）
+const renderChoices = async () => {
     const container = getById('choices-container');
     container.innerHTML = '';
-    const choices = shuffle([quiz.answer, ...shuffle(quiz.wrongCandidates).slice(0, 3)]);
-    for (const text of choices) {
+    for (const text of currentChoices) {
         const btn = document.createElement('button');
         btn.innerHTML = text;
         btn.dataset['value'] = text;
         btn.addEventListener('click', () => checkAnswer(text));
         container.appendChild(btn);
     }
-    // 選択肢の数式をレンダリング
     await typeset(container);
+};
+// 誤答後の再挑戦：選択肢の位置のみシャッフルして再描画
+const retryQuestion = async () => {
+    feedbackText.textContent = '';
+    feedbackText.className = '';
+    currentChoices = shuffle(currentChoices);
+    await renderChoices();
+    // 標準モードのみ問題タイマーをリセット・再スタート（TAモードはグローバルタイマーが継続中）
     if (currentMode === 'standard') {
         timeLeftMs = TIME_LIMIT_ST * 1000;
         startQuestionTimer();
@@ -105,7 +243,6 @@ const renderQuestion = async () => {
 const checkAnswer = async (selected) => {
     const quiz = QUIZ_DATA[currentQuizIndex];
     const perf = statsMap.get(quiz.question) || { attempts: 0, corrects: 0 };
-    perf.attempts++;
     // 全ボタン無効化 & ハイライト
     const btns = getById('choices-container').querySelectorAll('button');
     btns.forEach((btn) => {
@@ -119,6 +256,8 @@ const checkAnswer = async (selected) => {
         }
     });
     if (selected === quiz.answer) {
+        // --- 正解 ---
+        perf.attempts++;
         perf.corrects++;
         totalSolvedCount++;
         feedbackText.textContent = '✓ 正解！';
@@ -129,14 +268,15 @@ const checkAnswer = async (selected) => {
         setTimeout(nextQuestion, NEXT_DELAY);
     }
     else {
-        feedbackText.textContent = '✗ 不正解！';
+        // --- 不正解 ---
+        perf.attempts++;
+        feedbackText.textContent = '✗ 不正解！正解を確認してください';
         feedbackText.className = 'feedback-wrong';
         statsMap.set(quiz.question, perf);
-        // 不正解でも一定時間後に次へ（標準モード）
-        if (currentMode === 'standard') {
+        // 標準モードのみタイマー停止（TAモードはグローバルタイマーを止めない）
+        if (currentMode === 'standard')
             pauseTimer();
-            setTimeout(nextQuestion, NEXT_DELAY);
-        }
+        setTimeout(retryQuestion, 2000);
     }
 };
 const nextQuestion = () => {
@@ -166,16 +306,29 @@ const startQuestionTimer = () => {
         updateTimerDisplay();
         if (timeLeftMs <= 0) {
             clearInterval(timerId);
+            // タイムアウト：不正解扱いでハイライト → 1秒後に再挑戦
             const quiz = QUIZ_DATA[currentQuizIndex];
             const perf = statsMap.get(quiz.question) || { attempts: 0, corrects: 0 };
             perf.attempts++;
             statsMap.set(quiz.question, perf);
-            nextQuestion();
+            // 正解ボタンをハイライト表示
+            const btns = getById('choices-container').querySelectorAll('button');
+            btns.forEach((btn) => {
+                btn.disabled = true;
+                if (btn.dataset['value'] === quiz.answer) {
+                    btn.classList.add('btn-correct');
+                }
+            });
+            feedbackText.textContent = '⏰ 時間切れ！正解を確認してください';
+            feedbackText.className = 'feedback-wrong';
+            setTimeout(retryQuestion, 2000);
         }
     }, TICK_MS);
 };
-const pauseTimer = () => { if (timerId)
-    clearInterval(timerId); };
+const pauseTimer = () => {
+    if (timerId)
+        clearInterval(timerId);
+};
 const resumeTimer = () => {
     if (currentMode === 'time-attack')
         startGlobalTimer();
@@ -226,8 +379,7 @@ const finishGame = async () => {
     for (const [question, perf] of statsMap) {
         const rateNum = (perf.corrects / perf.attempts) * 100;
         const rate = rateNum.toFixed(1);
-        const rateClass = rateNum >= 80 ? 'rate-good' :
-            rateNum >= 50 ? 'rate-mid' : 'rate-bad';
+        const rateClass = rateNum >= 80 ? 'rate-good' : rateNum >= 50 ? 'rate-mid' : 'rate-bad';
         const row = document.createElement('tr');
         row.innerHTML = `
       <td>${question}</td>
