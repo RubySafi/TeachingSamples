@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Long Division</title>
+    <title>Long Division without Remainder</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500&display=swap"
       rel="stylesheet"
@@ -315,39 +315,20 @@
         flex-shrink: 0;
       }
 
-      /* ── Placeholder for Section 2 ── */
-      .placeholder {
-        text-align: center;
-        padding: 3em 2em;
-        color: var(--ink-light);
-        font-size: 0.95rem;
-        border: 2px dashed var(--rule);
-        border-radius: 6px;
-      }
-
       .s2-input {
-        /* 1. フォントサイズを大きくする */
         font-size: 24px;
-
-        /* 2. 上下に余白を作って高さを出す（左右は0に設定） */
         padding: 15px 0;
-
-        /* 3. テキストを中央寄せにする（プレースホルダーの ? も中央になります） */
         text-align: center;
-
-        /* 4. 必要に応じて全体の幅を調整 */
         width: 100%;
         max-width: 200px;
-
-        /* 見た目を整えるオプション */
-        box-sizing: border-box; /* paddingを含めたサイズ計算にする */
+        box-sizing: border-box;
         border: 2px solid #ccc;
         border-radius: 8px;
       }
       .s2-feedback {
         font-size: 20pt;
-        margin-top: 10px; /* 入力欄との隙間 */
-        min-height: 1.5em; /* 文字が表示されていない時も高さを確保（ガタつき防止） */
+        margin-top: 10px;
+        min-height: 1.5em;
         text-align: center;
         color: red;
         padding-left: 10px;
@@ -357,10 +338,11 @@
   <body>
     <div class="page-wrapper">
       <!-- Page heading -->
-      <h1 class="page-title">Long Division</h1>
+      <h1 class="page-title">Long Division without Remainder</h1>
       <p class="page-subtitle">
-        Long division is a step-by-step method for dividing large numbers by
-        hand. Work through each section below to learn how it works.
+        Sometimes a division doesn't come out even straight away — but if we
+        keep going past the decimal point, we can always find an exact answer.
+        Work through each section below to learn how it works.
       </p>
 
       <!-- ══════════════════════════════════════
@@ -370,14 +352,13 @@
         <div class="section-card">
           <div class="section-header">
             <span class="section-number">SECTION 01</span>
-            <span class="section-title">The Long Division with Remainder</span>
+            <span class="section-title">Long Division with a Decimal Answer</span>
           </div>
           <div class="section-body">
             <p>
-              We can solve a division problem step by step using a written
-              method called
-              <strong>long division</strong>. Press <em>Next →</em> to walk
-              through each stage, or click any dot to jump to that step. Use
+              When a division doesn't come out even, we write a decimal point
+              and keep dividing. Press <em>Next →</em> to walk through each
+              stage, or click any dot to jump to that step. Use
               <em>New ↺</em> to get a different problem.
             </p>
 
@@ -394,8 +375,8 @@
                 <div class="canvas-wrap" style="zoom: 80%">
                   <canvas
                     id="division-canvas"
-                    width="380"
-                    height="520"
+                    width="420"
+                    height="560"
                   ></canvas>
                 </div>
                 <div class="nav-bar">
@@ -418,7 +399,14 @@
                       class="colour-swatch"
                       style="background: #c0392b"
                     ></div>
-                    Quotient digit / final remainder
+                    Quotient digit
+                  </div>
+                  <div class="colour-key-item">
+                    <div
+                      class="colour-swatch"
+                      style="background: #8e44ad"
+                    ></div>
+                    Decimal point
                   </div>
                   <div class="colour-key-item">
                     <div
@@ -442,10 +430,9 @@
           <!-- /.section-body -->
         </div>
       </section>
-      <!-- /.section-card -->
 
       <!-- ══════════════════════════════════════
-           Section 2 — Practice  (placeholder)
+           Section 2 — Practice
       ══════════════════════════════════════ -->
       <section id="sec2" class="section-card">
         <div class="section-header">
@@ -470,10 +457,9 @@
                 <button class="btn-new" id="s2-btn-new">New ↺</button>
               </div>
               <div class="canvas-wrap" style="zoom: 80%">
-                <canvas id="s2-canvas" width="380" height="520"></canvas>
+                <canvas id="s2-canvas" width="420" height="560"></canvas>
               </div>
               <div class="nav-bar">
-                <!-- Back button removed per spec; only Check/Next remains -->
                 <span class="step-indicator" id="s2-step-indicator">— / —</span>
                 <button class="btn-nav" id="s2-btn-check">Check →</button>
               </div>
@@ -484,10 +470,8 @@
             <div class="notebook-caption-col">
               <div class="caption-label" id="s2-caption-step">STEP —</div>
 
-              <!-- Short instruction line -->
               <div class="s2-instruction" id="s2-instruction">—</div>
 
-              <!-- Input area (hidden when no input is needed; JS sets display:flex/none) -->
               <div
                 class="s2-input-wrap"
                 id="s2-input-wrap"
@@ -503,7 +487,6 @@
                   maxlength="6"
                   placeholder="?"
                 />
-                <!-- ③ フィードバックは input の真下に独立行 -->
                 <div class="s2-feedback" id="s2-feedback"></div>
               </div>
 
@@ -511,7 +494,11 @@
                 <div class="colour-key-title">Colour Guide</div>
                 <div class="colour-key-item">
                   <div class="colour-swatch" style="background: #c0392b"></div>
-                  Quotient digit / final remainder
+                  Quotient digit
+                </div>
+                <div class="colour-key-item">
+                  <div class="colour-swatch" style="background: #8e44ad"></div>
+                  Decimal point
                 </div>
                 <div class="colour-key-item">
                   <div class="colour-swatch" style="background: #2980b9"></div>
@@ -532,7 +519,7 @@
     </div>
     <!-- /.page-wrapper -->
 
-    <script type="module" src="dist/07-sec1.js"></script>
-    <script type="module" src="dist/07-sec2.js"></script>
+    <script type="module" src="dist/08-sec1.js"></script>
+    <script type="module" src="dist/08-sec2.js"></script>
   </body>
 </html>
