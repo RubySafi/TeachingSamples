@@ -1,4 +1,12 @@
 // =============================================
+// 練習モード設定
+// =============================================
+//
+// bPracticeZero = true  : 商に 0 が含まれる問題を約 50% の確率で出題する
+// bPracticeZero = false : 完全ランダム（デフォルト）
+//
+const bPracticeZero = true;
+// =============================================
 // データ生成（sec1 と同一ロジック）
 // =============================================
 function generateSequences(dividend, divisor) {
@@ -428,6 +436,20 @@ function render(canvas, steps, upToStep, dividend, divisor, seq) {
 // 問題生成
 // =============================================
 function randomProblem() {
+    // bPracticeZero = true のとき，約 50% の確率でゼロ含む商の問題を狙って生成する
+    const shouldContainZero = bPracticeZero && Math.random() < 0.5;
+    if (shouldContainZero) {
+        // 商にゼロが含まれる組み合わせが見つかるまでリトライ
+        for (let attempt = 0; attempt < 1000; attempt++) {
+            const dividend = Math.floor(Math.random() * 9000) + 1000;
+            const divisor = Math.floor(Math.random() * 8) + 2;
+            const quotient = Math.floor(dividend / divisor);
+            if (quotient.toString().includes('0')) {
+                return { dividend, divisor };
+            }
+        }
+        // 万一見つからなければ（理論上ほぼ起こらない）フォールスルー
+    }
     const dividend = Math.floor(Math.random() * 9000) + 1000;
     const divisor = Math.floor(Math.random() * 8) + 2;
     return { dividend, divisor };
