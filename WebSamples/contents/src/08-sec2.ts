@@ -845,6 +845,7 @@ function initUI(dividend: number, divisor: number) {
 // =============================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
   let { dividend, divisor } = randomProblem();
   initUI(dividend, divisor);
 

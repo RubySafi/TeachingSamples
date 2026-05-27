@@ -661,6 +661,7 @@ function initUI(dividend, divisor) {
 // エントリポイント
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
     let { dividend, divisor } = randomProblem();
     initUI(dividend, divisor);
     const btnNew = document.getElementById('s2-btn-new');
