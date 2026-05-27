@@ -444,7 +444,9 @@ function randomProblem() {
             const dividend = Math.floor(Math.random() * 9000) + 1000;
             const divisor = Math.floor(Math.random() * 8) + 2;
             const quotient = Math.floor(dividend / divisor);
-            if (quotient.toString().includes('0')) {
+            const s = quotient.toString();
+            // 1の位以外（= 先頭以外の途中）に 0 が含まれるか
+            if (s.slice(0, -1).includes('0')) {
                 return { dividend, divisor };
             }
         }
@@ -605,6 +607,7 @@ function initUI(dividend, divisor) {
 // エントリポイント
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
     let { dividend, divisor } = randomProblem();
     initUI(dividend, divisor);
     const btnNew = document.getElementById('s2-btn-new');
